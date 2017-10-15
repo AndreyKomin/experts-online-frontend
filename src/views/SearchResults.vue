@@ -1,25 +1,37 @@
 <template>
-  <div class="news-view">
-    <div class="news-list-nav">
-      <router-link v-if="page > 1" :to="'/' + type + '/' + (page - 1)">&lt; prev</router-link>
-      <a v-else class="disabled">&lt; prev</a>
-      <span>{{ page }}/{{ maxPage }}</span>
-      <router-link v-if="hasMore" :to="'/' + type + '/' + (page + 1)">more &gt;</router-link>
-      <a v-else class="disabled">more &gt;</a>
-    </div>
-    <transition :name="transition">
-      <div class="news-list" :key="displayedPage" v-if="displayedPage > 0">
-        <transition-group tag="ul" name="item">
-          <item v-for="item in displayedItems" :key="item.id" :item="item">
-          </item>
-        </transition-group>
+  <div>
+    <header class="header">
+      <nav class="inner">
+        <router-link to="/" exact>
+          <span>Главная</span>
+        </router-link>
+        <div class="flex1"></div>
+        <ExpertsFilter />
+      </nav>
+    </header>
+    <transition name="fade" mode="out-in">
+      <div class="news-view">
+        <div class="news-list-nav">
+          <router-link v-if="page > 1" :to="{ path: 'search', query: { page: page - 1 }}">&lt; Назад</router-link>
+          <a v-else class="disabled">&lt; Назад</a>
+          <span>{{ page }}/{{ maxPage }}</span>
+          <router-link v-if="hasMore" :to="{ path: 'search', query: { page: page + 1 }}">Вперед &gt;</router-link>
+          <a v-else class="disabled">Вперед &gt;</a>
+        </div>
+        <transition :name="transition">
+          <div class="news-list" :key="displayedPage" v-if="displayedPage > 0">
+            <transition-group tag="ul" name="item">
+              <item v-for="item in displayedItems" :key="item.id" :item="item">
+              </item>
+            </transition-group>
+          </div>
+        </transition>
       </div>
     </transition>
   </div>
 </template>
 
 <script>
-import { watchList } from '../api'
 import Item from '../components/Item.vue'
 
 export default {
@@ -29,25 +41,21 @@ export default {
     Item
   },
 
-  props: {
-    type: String
-  },
-
   data () {
     return {
       transition: 'slide-right',
-      displayedPage: Number(this.$route.params.page) || 1,
+      displayedPage: Number(this.$route.query.page) || 1,
       displayedItems: this.$store.getters.activeItems
     }
   },
 
   computed: {
     page () {
-      return Number(this.$route.params.page) || 1
+      return Number(this.$route.query.page) || 1
     },
     maxPage () {
-      const { itemsPerPage, lists } = this.$store.state
-      return Math.ceil(lists[this.type].length / itemsPerPage)
+      const { itemsPerPage, users } = this.$store.state;
+      return Math.ceil(users.length / itemsPerPage)
     },
     hasMore () {
       return this.page < this.maxPage
@@ -55,20 +63,7 @@ export default {
   },
 
   beforeMount () {
-    if (this.$root._isMounted) {
       this.loadItems(this.page)
-    }
-    // watch the current list for realtime updates
-    this.unwatchList = watchList(this.type, ids => {
-      this.$store.commit('SET_LIST', { type: this.type, ids })
-      this.$store.dispatch('ENSURE_ACTIVE_ITEMS').then(() => {
-        this.displayedItems = this.$store.getters.activeItems
-      })
-    })
-  },
-
-  beforeDestroy () {
-    this.unwatchList()
   },
 
   watch: {
@@ -79,19 +74,17 @@ export default {
 
   methods: {
     loadItems (to = this.page, from = -1) {
-      this.$bar.start()
-      this.$store.dispatch('FETCH_LIST_DATA', {
-        type: this.type
-      }).then(() => {
+      this.$bar.start();
+      this.$store.dispatch('FETCH_USERS').then(() => {
         if (this.page < 0 || this.page > this.maxPage) {
-          this.$router.replace(`/${this.type}/1`)
+          this.$router.replace({ query: { page: 1 } });
           return
         }
         this.transition = from === -1
           ? null
-          : to > from ? 'slide-left' : 'slide-right'
-        this.displayedPage = to
-        this.displayedItems = this.$store.getters.activeItems
+          : to > from ? 'slide-left' : 'slide-right';
+        this.displayedPage = to;
+        this.displayedItems = this.$store.getters.activeItems;
         this.$bar.finish()
       })
     }

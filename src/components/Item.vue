@@ -1,7 +1,10 @@
 <template>
   <li class="news-item">
-    <span class="score">{{ item.score }}</span>
+    <span class="image">
+      <img :src="item.picture.medium" :alt="item.name">
+    </span>
     <span class="title">
+      {{ item.name }}
       <template v-if="item.url">
         <a :href="item.url" target="_blank" rel="noopener">{{ item.title }}</a>
         <span class="host"> ({{ item.url | host }})</span>
@@ -42,20 +45,15 @@ export default {
 <style lang="stylus">
 .news-item
   background-color #fff
-  padding 20px 30px 20px 80px
+  padding 15px 30px
   border-bottom 1px solid #eee
   position relative
   line-height 20px
-  .score
-    color #ff6600
-    font-size 1.1em
-    font-weight 700
-    position absolute
-    top 50%
-    left 0
-    width 80px
-    text-align center
-    margin-top -10px
+  display flex
+  align-items flex-start
+
+  .image
+    margin-right 10px;
   .meta, .host
     font-size .85em
     color #828282
