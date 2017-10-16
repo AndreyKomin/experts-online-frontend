@@ -1,7 +1,7 @@
 <template>
   <div class="user-view">
     <template v-if="user">
-      <h1>User : {{ user.id }}</h1>
+      <h1>User : {{ user.name }}</h1>
       <ul class="meta">
         <li><span class="label">Created:</span> {{ user.created | timeAgo }} ago</li>
         <li><span class="label">Karma:</span> {{ user.karma }}</li>
@@ -25,19 +25,15 @@ export default {
 
   computed: {
     user () {
-      return this.$store.state.users[this.$route.params.id]
+      return this.$store.state.user;
     }
   },
 
-  asyncData ({ store, route: { params: { id }}}) {
+  asyncData ({ store, route: { params: { userID }}}) {
+    const match = /id(\d+)/g.exec(userID);
+    const id = match[1];
     return store.dispatch('FETCH_USER', { id })
   },
-
-  title () {
-    return this.user
-      ? this.user.id
-      : 'User not found'
-  }
 }
 </script>
 

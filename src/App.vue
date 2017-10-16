@@ -2,12 +2,23 @@
   <div id="app">
     <SVGSprite />
 
+    <header class="header">
+      <nav class="inner">
+        <router-link to="/"><span>Главная</span></router-link>
+        <router-link to="/registration"><span>Регистрация</span></router-link>
+        <router-link to="/roadmap"><span>RoadMap</span></router-link>
+        <router-link to="/contacts"><span>Контакты</span></router-link>
+        <div class="flex1"></div>
+        <ExpertsFilter v-if="$route.path === '/search'" />
+      </nav>
+    </header>
     <router-view class="view"></router-view>
 
-      </div>
+  </div>
 </template>
 
 <script>
+
   import SVGSprite from './components/base/SVGSprite.vue'
   import ExpertsFilter from './components/ExpertsFilter.vue'
 
@@ -16,7 +27,7 @@
     components: {
       SVGSprite,
       ExpertsFilter
-    }
+    },
   }
 </script>
 

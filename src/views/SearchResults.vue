@@ -1,14 +1,5 @@
 <template>
   <div>
-    <header class="header">
-      <nav class="inner">
-        <router-link to="/" exact>
-          <span>Главная</span>
-        </router-link>
-        <div class="flex1"></div>
-        <ExpertsFilter />
-      </nav>
-    </header>
     <transition name="fade" mode="out-in">
       <div class="news-view">
         <div class="news-list-nav">
@@ -85,7 +76,7 @@ export default {
           : to > from ? 'slide-left' : 'slide-right';
         this.displayedPage = to;
         this.displayedItems = this.$store.getters.activeItems;
-        this.$bar.finish()
+        this.$bar.finish();
       })
     }
   }

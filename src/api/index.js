@@ -1,5 +1,6 @@
 import axios from 'axios';
 import mockData from './mockData';
+import { capitalizeFirstLetter } from './mockFunc';
 
 const logRequests = !!process.env.DEBUG_API
 
@@ -7,8 +8,6 @@ function fetch (child) {
   logRequests && console.log(`fetching ${child}...`)
 
   return new Promise((resolve, reject) => {
-
-
 
   });
 }
@@ -22,19 +21,22 @@ export function fetchItems (ids) {
 }
 
 export function fetchUser (id) {
-  return fetch(`user/${id}`)
+  return axios.get(`https://randomuser.me/api/`).then(response => {
+    return response.data.results.map((e, i) => {
+      e.id = 1;
+      e.name = capitalizeFirstLetter(e.name.first) + " " +  capitalizeFirstLetter(e.name.last);
+      e.url = '/id' + i;
+      return e;
+    })[0];
+  })
 }
 
 export function fetchUsers () {
   return axios.get(`https://randomuser.me/api/?results=100`).then(response => {
-
-      function capitalizeFirstLetter(string) {
-          return string.charAt(0).toUpperCase() + string.slice(1);
-      }
-
     return response.data.results.map((e, i) => {
         e.id = i;
         e.name = capitalizeFirstLetter(e.name.first) + " " +  capitalizeFirstLetter(e.name.last);
+        e.url = '/id' + i;
         return e;
     });
   })// fetch(`experts`)

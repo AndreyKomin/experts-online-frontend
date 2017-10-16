@@ -15,5 +15,10 @@ export default {
   // this Array may not be fully fetched.
   activeItems (state, getters) {
     return getters.activeUsers
+  },
+
+  activeUser (state, getters) {
+    const { user } = state;
+    return user
   }
 }

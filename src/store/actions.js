@@ -10,8 +10,6 @@ export default {
   },
 
   FETCH_USER: ({ commit, state }, { id }) => {
-    return state.users[id]
-      ? Promise.resolve(state.users[id])
-      : fetchUser(id).then(user => commit('SET_USER', { id, user }))
+    return fetchUser(id).then(user => commit('SET_USER', { id, user }))
   }
 }

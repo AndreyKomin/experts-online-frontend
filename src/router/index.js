@@ -4,10 +4,13 @@ import Router from 'vue-router'
 Vue.use(Router)
 
 // route-level code splitting
-const Home = () => import('../views/Home.vue')
-const SearchResults = () => import('../views/SearchResults.vue')
-const ItemView = () => import('../views/ItemView.vue')
-const UserView = () => import('../views/UserView.vue')
+const Home = () => import('../views/Home.vue');
+const Registration = () => import('../views/Registration.vue');
+const Roadmap = () => import('../views/Roadmap.vue');
+const Contacts = () => import('../views/Contacts.vue');
+const SearchResults = () => import('../views/SearchResults.vue');
+const ItemView = () => import('../views/ItemView.vue');
+const UserView = () => import('../views/UserView.vue');
 
 export function createRouter () {
   return new Router({
@@ -16,9 +19,11 @@ export function createRouter () {
     scrollBehavior: () => ({ y: 0 }),
     routes: [
       { path: '/', component: Home },
+      { path: '/registration', component: Registration },
+      { path: '/roadmap', component: Roadmap },
+      { path: '/contacts', component: Contacts },
       { path: '/search', component: SearchResults, props: (route) => ({ query: route.query.q }) },
-      { path: '/item/:id(\\d+)', component: ItemView },
-      { path: '/user/:id', component: UserView }
+      { path: '/:userID', component: UserView },
     ]
   })
 }
