@@ -1,6 +1,6 @@
 <template>
   <div class="root">
-    <button @click="toggleFilterArea" class="filter-button">
+    <button @click="toggleFilterArea" class="button filter-button">
       <svg-icon iconId="filter" />
       <span>Фильтр</span>
     </button>
@@ -64,15 +64,6 @@ export default {
     right: 16px;
 
 .filter-button
-  cursor pointer
-  background-color #5682a3
-  border 1px solid white
-  border-radius 3px
-  padding 5px
-  display flex
-  align-items center
-  color white
-  font-weight 500
   svg
     margin-right 3px
 

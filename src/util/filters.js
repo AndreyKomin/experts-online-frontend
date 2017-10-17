@@ -22,3 +22,9 @@ function pluralize (time, label) {
   }
   return time + label + 's'
 }
+
+
+export function getUserId (userID) {
+  const match = /id(\d+)/g.exec(userID);
+  return match[1];
+}

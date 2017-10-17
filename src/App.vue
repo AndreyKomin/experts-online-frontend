@@ -32,6 +32,9 @@
 </script>
 
 <style lang="stylus">
+
+  @import "styles/main.styl"
+
 body
   font-family -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
   font-size 15px

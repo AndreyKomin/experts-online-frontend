@@ -30,5 +30,11 @@
     width: 20px
     height: 20px
     fill: white
+  .icon-whatsapp
+    width: 40px
+    height: 40px
+  .icon-telegram
+    width: 34px
+    height: 34px
 
 </style>

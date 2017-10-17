@@ -58,15 +58,7 @@ export default {
     display flex
     align-items center
   .button
-    cursor pointer
-    background-color #5682a3
-    border 1px solid white
-    border-radius 3px
-    padding 5px
-    display flex
-    align-items center
-    color white
-    font-weight 500
+    width auto
   .buttons
     width 100%
     display flex

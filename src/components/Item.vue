@@ -1,8 +1,8 @@
 <template>
   <li class="search-item">
-    <span class="image">
+    <div class="image">
       <img :src="item.picture.medium" :alt="item.name">
-    </span>
+    </div>
     <div class="item-body">
       <h3 class="title">
         <a :href="item.url" >{{ item.name }}</a>
