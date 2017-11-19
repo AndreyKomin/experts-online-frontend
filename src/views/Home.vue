@@ -10,18 +10,31 @@
     <div>
       <SearchForm />
     </div>
+
+    <form>
+      <label for="login">Username</label>
+      <input type="text" id="login" name="login" class="form-control" v-model="login" />
+      <button class="button">Login</button>
+    </form>
   </div>
 
 </template>
 
 <script>
 
-  import SearchForm from 'components/SearchForm.vue'
+  import SearchForm from 'components/SearchForm.vue';
+  import Echo from 'laravel-echo';
 
-export default {
+  const ws = new Echo({
+    broadcaster: 'socket.io',
+    host: 'https://ws.ekbrand.tk',
+  });
+
+  export default {
   name: 'home', // required
   data() {
     return {
+      login: "",
       buttons: [
         {
           id: 3,
@@ -48,6 +61,22 @@ export default {
   },
   components: {
     SearchForm
+  },
+  created() {
+    ws.channel('user.1').on('App\\Events\\MessengerAuthEvent', (payload) => {
+      console.log(payload);
+    });
+  },
+  methods: {
+    sendLogin() {
+      this.axios.post('https://ekbrand.tk/api/auth', {
+        login
+      }).then(() => {
+
+      }).error(() => {
+
+      })
+    }
   }
 //  props: ['item'],
   // http://ssr.vuejs.org/en/caching.html#component-level-caching
