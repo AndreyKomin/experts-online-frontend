@@ -2,6 +2,19 @@ import Vue from 'vue'
 
 export default {
 
+  SET_AUTH: (state, { token }) => {
+    state.token = token;
+    localStorage.setItem('token', token);
+  },
+
+  SET_TOKEN: (state, { token }) => {
+    state.token = token;
+  },
+
+  SET_ME: (state, { me }) => {
+    state.me = me;
+  },
+
   SET_USERS: (state, { users }) => {
     state.users = users;
   },

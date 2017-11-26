@@ -11,10 +11,10 @@
       <SearchForm />
     </div>
 
-    <form>
+    <form v-on:submit.prevent="sendLogin()">
       <label for="login">Username</label>
       <input type="text" id="login" name="login" class="form-control" v-model="login" />
-      <button class="button">Login</button>
+      <button class="button" @click="sendLogin()">Login</button>
     </form>
   </div>
 
@@ -23,18 +23,19 @@
 <script>
 
   import SearchForm from 'components/SearchForm.vue';
-  import Echo from 'laravel-echo';
-
-  const ws = new Echo({
-    broadcaster: 'socket.io',
-    host: 'https://ws.ekbrand.tk',
-  });
+//  import Echo from 'laravel-echo';
+//
+//  const ws = new Echo({
+//    broadcaster: 'socket.io',
+//    host: 'https://ws.ekbrand.tk',
+//  });
 
   export default {
   name: 'home', // required
   data() {
     return {
       login: "",
+      messenger_id: "1",
       buttons: [
         {
           id: 3,
@@ -63,19 +64,15 @@
     SearchForm
   },
   created() {
-    ws.channel('user.1').on('App\\Events\\MessengerAuthEvent', (payload) => {
-      console.log(payload);
-    });
+//    ws.channel('user.1').on('App\\Events\\MessengerAuthEvent', (payload) => {
+//      console.log(payload);
+//    });
   },
   methods: {
     sendLogin() {
-      this.axios.post('https://ekbrand.tk/api/auth', {
-        login
-      }).then(() => {
-
-      }).error(() => {
-
-      })
+      this.$store.dispatch('FETCH_AUTH', { login: this.login, messenger_id: this.messenger_id }).then(() => {
+        this.$router.go(this.$router.currentRoute);
+      }).catch();
     }
   }
 //  props: ['item'],

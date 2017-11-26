@@ -20,6 +20,24 @@ export function fetchItems (ids) {
   return Promise.all(ids.map(id => fetchItem(id)))
 }
 
+export function auth (login, messenger_id) {
+  return axios.post(`http://0.0.0.0:7000/api/auth/`, { login, messenger_id }).then(response => {
+    return response.data.token
+  })
+}
+
+export function fetchToken (type) {
+  return localStorage['token']
+    ? Promise.resolve(localStorage['token'])
+    : null
+}
+
+export function fetchMe (token) {
+  return axios.get(`http://0.0.0.0:7000/api/me/`, { params: { token } }).then(response => {
+    return response.data.data
+  })
+}
+
 export function fetchUser (id) {
   return axios.get(`https://randomuser.me/api/`).then(response => {
     return response.data.results.map((e, i) => {

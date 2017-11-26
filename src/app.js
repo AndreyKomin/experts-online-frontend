@@ -1,4 +1,6 @@
 import Vue from 'vue'
+import VueAxios from 'vue-axios'
+// import VueAuthenticate from 'vue-authenticate'
 import axios from 'axios'
 import App from './App.vue'
 import { createStore } from './store'
@@ -6,6 +8,18 @@ import { createRouter } from './router'
 import { sync } from 'vuex-router-sync'
 import titleMixin from './util/title'
 import * as filters from './util/filters'
+
+Vue.use(VueAxios, axios);
+// Vue.use(VueAuthenticate, {
+//   baseUrl: 'http://localhost:3000', // Your API domain
+//
+//   providers: {
+//     github: {
+//       clientId: '',
+//       redirectUri: '/auth/callback' // Your client app URL
+//     }
+//   }
+// });
 
 if (typeof window === 'undefined') {
   global.window = {}
@@ -15,8 +29,6 @@ global.io = require('socket.io-client');
 
 // mixin for handling title
 Vue.mixin(titleMixin)
-
-Vue.use(axios);
 
 // register global utility filters.
 Object.keys(filters).forEach(key => {

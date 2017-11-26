@@ -20,5 +20,10 @@ export default {
   activeUser (state, getters) {
     const { user } = state;
     return user
+  },
+
+  me (state, getters) {
+    const { me } = state;
+    return me
   }
 }

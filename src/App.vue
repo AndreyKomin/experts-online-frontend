@@ -10,6 +10,7 @@
         <router-link to="/contacts"><span>Контакты</span></router-link>
         <div class="flex1"></div>
         <ExpertsFilter v-if="$route.path === '/search'" />
+        <HeaderDD />
       </nav>
     </header>
     <router-view class="view"></router-view>
@@ -21,13 +22,21 @@
 
   import SVGSprite from './components/base/SVGSprite.vue'
   import ExpertsFilter from './components/ExpertsFilter.vue'
+  import HeaderDD from './components/HeaderDD.vue'
 
   export default {
     name: 'app',
     components: {
       SVGSprite,
-      ExpertsFilter
+      ExpertsFilter,
+      HeaderDD
     },
+    mounted() {
+      this.$store.dispatch('FETCH_TOKEN').then(() => {
+        console.log('TOIKE');
+        this.$nextTick();
+      });
+    }
   }
 </script>
 
