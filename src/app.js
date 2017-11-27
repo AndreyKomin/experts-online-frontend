@@ -21,6 +21,7 @@ Vue.use(VueAxios, axios);
 //   }
 // });
 
+
 if (typeof window === 'undefined') {
   global.window = {}
 }

@@ -4,6 +4,7 @@ import {
   fetchMe,
   fetchUser,
   fetchUsers,
+  updateMe,
 } from '../api'
 
 export default {
@@ -18,7 +19,7 @@ export default {
   },
 
   FETCH_ME: ({ commit, state }) => {
-    return fetchMe(state.token || localStorage['token']).then(me => commit('SET_ME', { me }))
+    return fetchMe(state.token).then(me => commit('SET_ME', { me }))
   },
 
   FETCH_USERS: ({ commit, state }) => {
@@ -27,5 +28,10 @@ export default {
 
   FETCH_USER: ({ commit, state }, { id }) => {
     return fetchUser(id).then(user => commit('SET_USER', { id, user }))
-  }
+  },
+
+  UPDATE_ME: ({ commit, state }, { ...data }) => {
+    console.log(data);
+    return updateMe(state.token, data)
+  },
 }

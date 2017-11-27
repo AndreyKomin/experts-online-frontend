@@ -22,6 +22,7 @@
 
 <script>
 
+  import { mapActions } from 'vuex';
   import SearchForm from 'components/SearchForm.vue';
 //  import Echo from 'laravel-echo';
 //
@@ -69,8 +70,11 @@
 //    });
   },
   methods: {
+    ...mapActions([
+      'FETCH_AUTH'
+    ]),
     sendLogin() {
-      this.$store.dispatch('FETCH_AUTH', { login: this.login, messenger_id: this.messenger_id }).then(() => {
+      this.FETCH_AUTH({ login: this.login, messenger_id: this.messenger_id }).then(() => {
         this.$router.go(this.$router.currentRoute);
       }).catch();
     }

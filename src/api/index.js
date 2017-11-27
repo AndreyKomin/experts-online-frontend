@@ -33,7 +33,8 @@ export function fetchToken (type) {
 }
 
 export function fetchMe (token) {
-  return axios.get(`http://0.0.0.0:7000/api/me/`, { params: { token } }).then(response => {
+  token = token || localStorage['token'];
+  return axios.get(`http://0.0.0.0:7000/api/me/`, { headers: { 'Authorization': 'Bearer ' + token } }).then(response => {
     return response.data.data
   })
 }
@@ -58,4 +59,10 @@ export function fetchUsers () {
         return e;
     });
   })// fetch(`experts`)
+}
+
+export function updateMe (token, data) {
+  return axios.put(`http://0.0.0.0:7000/api/me/`, { ...data }, { headers: { 'Authorization': 'Bearer ' + token } }).then(response => {
+    return response
+  })
 }
