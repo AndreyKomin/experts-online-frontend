@@ -29,11 +29,12 @@ export function auth (login, messenger_id) {
 export function fetchToken (type) {
   return localStorage['token']
     ? Promise.resolve(localStorage['token'])
-    : null
+    : Promise.reject()
 }
 
 export function fetchMe (token) {
   token = token || localStorage['token'];
+  if (token == null) return Promise.reject();
   return axios.get(`http://0.0.0.0:7000/api/me/`, { headers: { 'Authorization': 'Bearer ' + token } }).then(response => {
     return response.data.data
   })
@@ -51,14 +52,9 @@ export function fetchUser (id) {
 }
 
 export function fetchUsers () {
-  return axios.get(`https://randomuser.me/api/?results=100`).then(response => {
-    return response.data.results.map((e, i) => {
-        e.id = i;
-        e.name = capitalizeFirstLetter(e.name.first) + " " +  capitalizeFirstLetter(e.name.last);
-        e.url = '/id' + i;
-        return e;
-    });
-  })// fetch(`experts`)
+  return axios.get(`http://0.0.0.0:7000/api/users/`).then(response => {
+    return response.data.data
+  });
 }
 
 export function updateMe (token, data) {

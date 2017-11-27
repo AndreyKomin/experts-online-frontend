@@ -1,7 +1,7 @@
 <template>
 
   <div class="banner">
-    <h1 class="heading">Найди своего эксперта с нами!</h1>
+    <h1 class="heading">Получи консультацию от эксперта по своему проекту</h1>
 
     <h3 class="desc">Популярные запросы:</h3>
     <div class="buttons">
@@ -10,12 +10,6 @@
     <div>
       <SearchForm />
     </div>
-
-    <form v-on:submit.prevent="sendLogin()">
-      <label for="login">Username</label>
-      <input type="text" id="login" name="login" class="form-control" v-model="login" />
-      <button class="button" @click="sendLogin()">Login</button>
-    </form>
   </div>
 
 </template>
@@ -35,8 +29,6 @@
   name: 'home', // required
   data() {
     return {
-      login: "",
-      messenger_id: "1",
       buttons: [
         {
           id: 3,
@@ -69,16 +61,7 @@
 //      console.log(payload);
 //    });
   },
-  methods: {
-    ...mapActions([
-      'FETCH_AUTH'
-    ]),
-    sendLogin() {
-      this.FETCH_AUTH({ login: this.login, messenger_id: this.messenger_id }).then(() => {
-        this.$router.go(this.$router.currentRoute);
-      }).catch();
-    }
-  }
+
 //  props: ['item'],
   // http://ssr.vuejs.org/en/caching.html#component-level-caching
 //  serverCacheKey: ({ item: { id, __lastUpdated, time }}) => {

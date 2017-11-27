@@ -1,11 +1,11 @@
 <template>
   <li class="search-item">
     <div class="image">
-      <img :src="item.picture.medium" :alt="item.name">
+      <!--<img :src="item.picture.medium" :alt="item.name">-->
     </div>
     <div class="item-body">
       <h3 class="title">
-        <a :href="item.url" >{{ item.name }}</a>
+        <a :href="item.url" >{{ item.first_name }} {{ item.last_name }}</a>
       </h3>
     </div>
 

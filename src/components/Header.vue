@@ -10,18 +10,26 @@
         <div class="flex1"></div>
         <ExpertsFilter v-if="$route.path === '/search'" />
 
-        <div class="btn-group">
+        <div class="btn-group" v-if="me.login">
           <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             Привет, {{ me.first_name }} {{ me.last_name }}
           </button>
           <div class="dropdown-menu dropdown-menu-right">
             <router-link class="dropdown-item" to="/profile">Профиль</router-link>
             <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="#">Выход</a>
+            <button class="dropdown-item" @click="logout()" href="#">Выход</button>
           </div>
         </div>
-        <span v-if="me.login"> </span>
+
+        <button v-if="!me.login" @click="showAuth = true" class="btn btn-info">
+          Вход / Регистрация
+        </button>
       </nav>
+
+      <Auth
+          v-if="showAuth"
+          @close="showAuth = false"
+      ></Auth>
 
     </header>
 
@@ -31,11 +39,18 @@
 <script>
   import { mapGetters, mapActions } from 'vuex'
   import svgIcon from 'components/base/SVG.vue'
+  import Auth from 'components/Auth.vue'
 
-export default {
+  export default {
   name: 'site-header',
   components: {
-    svgIcon
+    svgIcon,
+    Auth
+  },
+  data() {
+    return {
+      showAuth: false
+    };
   },
   computed: mapGetters([
     'me'
@@ -46,7 +61,11 @@ export default {
   methods: {
     ...mapActions([
        'FETCH_ME'
-    ])
+    ]),
+    logout() {
+      localStorage.clear();
+      window.location.replace('/')
+    }
   }
 }
 </script>

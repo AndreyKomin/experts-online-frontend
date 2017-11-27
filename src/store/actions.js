@@ -9,9 +9,10 @@ import {
 
 export default {
 
-  FETCH_TOKEN: ({ commit, dispatch, state }) => {
+  FETCH_TOKEN: ({ commit }) => {
     return fetchToken()
       .then(token => commit('SET_TOKEN', { token }))
+      .catch(() => {})
   },
 
   FETCH_AUTH: ({ commit }, { login, messenger_id }) => {
@@ -19,18 +20,20 @@ export default {
   },
 
   FETCH_ME: ({ commit, state }) => {
-    return fetchMe(state.token).then(me => commit('SET_ME', { me }))
+    return fetchMe(state.token)
+      .then(me => commit('SET_ME', { me }))
+      .catch(() => {})
   },
 
-  FETCH_USERS: ({ commit, state }) => {
+  FETCH_USERS: ({ commit }) => {
     return fetchUsers().then(users => commit('SET_USERS', { users }))
   },
 
-  FETCH_USER: ({ commit, state }, { id }) => {
+  FETCH_USER: ({ commit }, { id }) => {
     return fetchUser(id).then(user => commit('SET_USER', { id, user }))
   },
 
-  UPDATE_ME: ({ commit, state }, { ...data }) => {
+  UPDATE_ME: ({ state }, { ...data }) => {
     console.log(data);
     return updateMe(state.token, data)
   },
