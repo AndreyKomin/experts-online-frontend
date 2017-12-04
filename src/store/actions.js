@@ -1,5 +1,6 @@
 import {
   auth,
+  oauth,
   fetchToken,
   fetchMe,
   fetchUser,
@@ -15,8 +16,12 @@ export default {
       .catch(() => {})
   },
 
-  FETCH_AUTH: ({ commit }, { login, messenger_id }) => {
-    return auth(login, messenger_id).then(token => commit('SET_AUTH', { token }))
+  FETCH_AUTH: ({ commit }, { login, messenger_id, code }) => {
+    return auth(login, messenger_id, code).then(token => commit('SET_AUTH', { token }))
+  },
+
+  OAUTH: ({ commit }, { provider, oauthService }) => {
+    return oauth(provider, oauthService).then(res => commit('SET_AUTH', { token: res.data.token }));
   },
 
   FETCH_ME: ({ commit, state }) => {
@@ -36,5 +41,9 @@ export default {
   UPDATE_ME: ({ state }, { ...data }) => {
     console.log(data);
     return updateMe(state.token, data)
+  },
+
+  UPDATE_AVATAR: ({ commit }, { avatar }) => {
+    return commit('SET_AVATAR', { avatar })
   },
 }

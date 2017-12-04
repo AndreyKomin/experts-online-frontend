@@ -24,6 +24,6 @@ export default {
 
   me (state, getters) {
     const { me } = state;
-    return me
+    return { ...me }
   }
 }

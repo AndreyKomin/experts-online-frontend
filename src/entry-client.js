@@ -1,4 +1,6 @@
 import Vue from 'vue'
+import VueAuthenticate from 'vue-authenticate'
+import VueCroppie from 'vue-croppie';
 import 'es6-promise/auto'
 import { createApp } from './app'
 import ProgressBar from './components/ProgressBar.vue'
@@ -21,6 +23,61 @@ Vue.mixin({
     }
   }
 })
+
+Vue.use(VueCroppie);
+
+Vue.use(VueAuthenticate, {
+  baseUrl: 'http://0.0.0.0:7000', // Your API domain
+
+  providers: {
+    facebook: {
+      name: 'facebook',
+      url: '/api/auth?provider=facebook',
+      authorizationEndpoint: 'https://www.facebook.com/v2.5/dialog/oauth',
+      redirectUri: window.location.origin + '/',
+      requiredUrlParams: ['display', 'scope'],
+      scope: ['email'],
+      scopeDelimiter: ',',
+      display: 'popup',
+      oauthType: '2.0',
+      popupOptions: { width: 580, height: 400 },
+      clientId: 1758040850935285,
+    },
+
+    google: {
+      name: 'google',
+      url: '/auth_success?provider=google',
+      authorizationEndpoint: 'https://accounts.google.com/o/oauth2/auth',
+      redirectUri: window.location.origin,
+      requiredUrlParams: ['scope'],
+      optionalUrlParams: ['display'],
+      scope: ['profile', 'email'],
+      scopePrefix: 'openid',
+      scopeDelimiter: ' ',
+      display: 'popup',
+      oauthType: '2.0',
+      popupOptions: { width: 452, height: 633 },
+      clientId: "135562740050-brfjngcfaui2eicj1vpq801hfm07osa4.apps.googleusercontent.com"
+    },
+
+    vk: {
+      name: 'vk',
+      url: '/api/auth?provider=vk',
+      authorizationEndpoint: 'https://oauth.vk.com/authorize',
+      redirectUri: window.location.origin,
+      requiredUrlParams: ['scope'],
+      optionalUrlParams: ['display'],
+      scope: ['email'],
+      scopePrefix: 'openid',
+      scopeDelimiter: ' ',
+      display: 'popup',
+      oauthType: '2.0',
+      popupOptions: { width: 452, height: 633 },
+      clientId: "620b4868620b4868620b4868b9624cd8666620b620b4868382f566a534439527a7449ca"
+    },
+  }
+});
+
 
 const { app, router, store } = createApp()
 

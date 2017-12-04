@@ -2,7 +2,11 @@
   <div class="user-view">
     <template v-if="me">
       <div class="left-side">
-        {{ me.first_name }} {{ me.last_name }}
+          <avatar :avatar="me.avatar">
+          </avatar>
+
+        <img :src="me.avatar" alt="Avatar">
+
       </div>
       <div class="right-side">
         <h1>{{ me.first_name }} {{ me.last_name }}</h1>
@@ -26,6 +30,12 @@
             <input id="last_name" type="text" class="form-control" v-model="me.last_name" />
           </div>
 
+          <div class="form-group" v-for="messenger in me.available_messengers">
+            <label for="telegram">Last Name</label>
+            <input id="telegram" type="text" class="form-control" v-model="messenger.messenger_unique_id" />
+            <input type="hidden" v-model="messenger.code" :value="messenger.code">
+          </div>
+
           <button class="button" @click="updateProfile()">Сохранить</button>
         </form>
 
@@ -41,13 +51,15 @@
   import { mapActions, mapGetters } from 'vuex';
   import modal from '../components/Modal.vue';
   import svgIcon from 'components/base/SVG.vue'
+  import avatar from 'components/Avatar.vue'
 
   export default {
   name: 'profile',
 
   components: {
     modal,
-    svgIcon
+    svgIcon,
+    avatar
   },
 
   computed: {
@@ -62,9 +74,11 @@
     ]),
     updateProfile() {
       this.UPDATE_ME({
-        login: this.me.login,
         first_name: this.me.first_name,
         last_name: this.me.last_name,
+        avatar: this.me.avatar,
+      }).then(() => {
+        this.$router.go(this.$router.currentRoute);
       });
     }
   }
@@ -72,5 +86,15 @@
 </script>
 
 <style lang="stylus" scoped>
+  .user-view
+    display flex
+    margin-top 40px
+
+  .left-side
+    flex-basis 30%
+    margin-right 40px
+
+  .right-side
+    flex 1
 
 </style>

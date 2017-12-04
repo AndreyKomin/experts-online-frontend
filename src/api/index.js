@@ -20,10 +20,14 @@ export function fetchItems (ids) {
   return Promise.all(ids.map(id => fetchItem(id)))
 }
 
-export function auth (login, messenger_id) {
-  return axios.post(`http://0.0.0.0:7000/api/auth/`, { login, messenger_id }).then(response => {
+export function auth (login, messenger_id, code) {
+  return axios.post(`http://0.0.0.0:7000/api/auth/`, { login, messenger_id, code }).then(response => {
     return response.data.token
   })
+}
+
+export function oauth (provider, oauthService) {
+  return oauthService.authenticate(provider);
 }
 
 export function fetchToken (type) {

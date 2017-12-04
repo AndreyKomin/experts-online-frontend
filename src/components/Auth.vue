@@ -2,53 +2,20 @@
   <modal classnames="modal-auth" @close="$emit('close')">
     <h3 slot="header">Вход / Регистрация</h3>
     <div slot="body">
-
-      <div class="row">
-        <div class="col-6">
-          <h4>Регистрация</h4>
-          <div class="oauth">
-            <button class="button oauth-button oauth-vk">
-              <svg-icon iconId="vk"></svg-icon>
-              <span>Вконтакте</span>
-            </button>
-            <button class="button oauth-button oauth-google">
-              <svg-icon iconId="google"></svg-icon>
-              <span>Google</span>
-            </button>
-            <button class="button oauth-button oauth-facebook">
-              <svg-icon iconId="facebook"></svg-icon>
-              <span>Facebook</span>
-            </button>
-          </div>
-
-        </div>
-        <div class="col-6">
-          <h4>Вход</h4>
-          <div class="oauth">
-            <button class="button oauth-button oauth-vk">
-              <svg-icon iconId="vk"></svg-icon>
-              <span>Вконтакте</span>
-            </button>
-            <button class="button oauth-button oauth-google">
-              <svg-icon iconId="google"></svg-icon>
-              <span>Google</span>
-            </button>
-            <button class="button oauth-button oauth-facebook">
-              <svg-icon iconId="facebook"></svg-icon>
-              <span>Facebook</span>
-            </button>
-          </div>
-
-          <form v-on:submit.prevent="sendLogin()">
-            <div class="form-group">
-              <label for="login">Логин:</label>
-              <input type="text" id="login" name="login" class="form-control" v-model="login" />
-            </div>
-            <button class="btn btn-success" @click="sendLogin()">Войти</button>
-          </form>
-        </div>
+      <div class="oauth">
+        <button class="button oauth-button oauth-vk" @click="oauthenticate('vk')">
+          <svg-icon iconId="vk"></svg-icon>
+          <span>Продолжить с Вконтакте</span>
+        </button>
+        <button class="button oauth-button oauth-google" @click="oauthenticate('google')">
+          <svg-icon iconId="google"></svg-icon>
+          <span>Продолжить с Google</span>
+        </button>
+        <button class="button oauth-button oauth-facebook" @click="oauthenticate('facebook')">
+          <svg-icon iconId="facebook"></svg-icon>
+          <span>Продолжить с Facebook</span>
+        </button>
       </div>
-
     </div>
     <div slot="footer">
       <button class="btn btn-dark btn-sm" @click="$emit('close')">
@@ -94,10 +61,16 @@ export default {
   },
   methods: {
     ...mapActions([
-      'FETCH_AUTH'
+      'FETCH_AUTH',
+      'OAUTH',
     ]),
     sendLogin() {
-      this.FETCH_AUTH({ login: this.login, messenger_id: this.messenger_id }).then(() => {
+      this.FETCH_AUTH({ login: this.login, messenger_id: this.messenger_id, code: "telegram" }).then(() => {
+        this.$router.go(this.$router.currentRoute);
+      }).catch();
+    },
+    oauthenticate(provider) {
+      this.OAUTH({ provider, oauthService: this.$auth }).then(() => { //TODO: Shift oauthService to the Middleware
         this.$router.go(this.$router.currentRoute);
       }).catch();
     }
@@ -113,6 +86,8 @@ export default {
 <style lang="stylus" scoped>
 
   .oauth
+    margin-top 20px
+
     svg
       width: 20px
       height: 20px
@@ -129,7 +104,6 @@ export default {
       display flex
       align-items stretch
       justify-content flex-start
-      width 70%
 
     &-google
       background-color #f3543c

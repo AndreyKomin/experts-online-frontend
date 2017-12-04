@@ -15,6 +15,10 @@ export default {
     state.me = me;
   },
 
+  SET_AVATAR: (state, { avatar }) => {
+    state.me.avatar = avatar;
+  },
+
   SET_USERS: (state, { users }) => {
     state.users = users;
   },
