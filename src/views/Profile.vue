@@ -37,6 +37,12 @@
             <input type="hidden" v-model="messenger.code" :value="messenger.code">
           </div>
 
+          <label class="custom-control custom-checkbox">
+            <input type="checkbox" class="custom-control-input" v-model="me.directInvite">
+            <span class="custom-control-indicator"></span>
+            <span class="custom-control-description">Разрешить прямое добавление (Пользователю будут показаны ваши контактные данные по запросу)</span>
+          </label>
+
           <button class="button" @click="updateProfile()">Сохранить</button>
         </form>
       </div>
@@ -79,10 +85,7 @@
     ]),
     updateProfile() {
       this.UPDATE_ME({
-        first_name: this.me.first_name,
-        last_name: this.me.last_name,
-        login: this.me.login,
-        avatar: this.me.avatar,
+        ...this.me
       }).then((res) => {
         console.log(res)
 //        this.$router.go(this.$router.currentRoute);

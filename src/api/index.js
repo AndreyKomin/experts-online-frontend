@@ -2,6 +2,29 @@ import axios from 'axios';
 import mockData from './mockData';
 import { capitalizeFirstLetter } from './mockFunc';
 
+axios.interceptors.response.use(function (response) {
+  return response;
+}, function (error) {
+  const originalRequest = error.config;
+
+  if (error.response.status === 401 && !originalRequest._retry) {
+    debugger;
+    originalRequest._retry = true;
+
+    const token = window.localStorage.getItem('token');
+    return axios.put('http://0.0.0.0:7000/api/auth', { token })
+      .then(({data}) => {
+        window.localStorage.setItem('token', data.token);
+        axios.defaults.headers.common['Authorization'] = 'Bearer ' + data.token;
+        originalRequest.headers['Authorization'] = 'Bearer ' + data.token;
+        return axios(originalRequest);
+      });
+  }
+
+  return Promise.reject(error);
+});
+
+
 const logRequests = !!process.env.DEBUG_API
 
 function fetch (child) {
