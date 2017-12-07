@@ -2,11 +2,12 @@
   <div class="user-view">
     <template v-if="me">
       <div class="left-side">
-          <avatar :avatar="me.avatar">
-          </avatar>
-
-        <img :src="me.avatar" alt="Avatar">
-
+        <user-image-placeholder class="avatar-image" v-if="!me.avatar"></user-image-placeholder>
+        <img v-if="me.avatar" class="avatar-image" :src="me.avatar" alt="Avatar">
+        <div class="buttons">
+          <button class="btn btn-info" @click="avatarModal = true">Обновить фото</button>
+          <button class="btn btn-light" @click="removeAvatar()">Удалить фото</button>
+        </div>
       </div>
       <div class="right-side">
         <h1>{{ me.first_name }} {{ me.last_name }}</h1>
@@ -38,10 +39,9 @@
 
           <button class="button" @click="updateProfile()">Сохранить</button>
         </form>
-
-
       </div>
 
+      <avatar-modal :showModal="avatarModal" @close="avatarModal = false"></avatar-modal>
     </template>
   </div>
 </template>
@@ -49,17 +49,17 @@
 <script>
 
   import { mapActions, mapGetters } from 'vuex';
-  import modal from '../components/Modal.vue';
   import svgIcon from 'components/base/SVG.vue'
-  import avatar from 'components/Avatar.vue'
+  import avatarModal from 'components/AvatarModal.vue'
+  import UserImagePlaceholder from 'components/UserImagePlaceholder.vue'
 
   export default {
   name: 'profile',
 
   components: {
-    modal,
     svgIcon,
-    avatar
+    avatarModal,
+    UserImagePlaceholder
   },
 
   computed: {
@@ -67,25 +67,44 @@
       'me'
     ])
   },
-
+  data() {
+    return {
+      avatarModal: false
+    }
+  },
   methods: {
     ...mapActions([
-      'UPDATE_ME'
+      'UPDATE_ME',
+      'UPDATE_AVATAR'
     ]),
     updateProfile() {
       this.UPDATE_ME({
         first_name: this.me.first_name,
         last_name: this.me.last_name,
+        login: this.me.login,
         avatar: this.me.avatar,
-      }).then(() => {
-        this.$router.go(this.$router.currentRoute);
+      }).then((res) => {
+        console.log(res)
+//        this.$router.go(this.$router.currentRoute);
       });
+    },
+    removeAvatar() {
+      const avatar = null;
+      this.UPDATE_AVATAR({ avatar });
     }
   }
 }
 </script>
 
 <style lang="stylus" scoped>
+  .buttons
+    display flex
+    justify-content space-between
+
+    button
+      flex-basis 45%
+
+
   .user-view
     display flex
     margin-top 40px
@@ -96,5 +115,8 @@
 
   .right-side
     flex 1
+
+  .avatar-image
+    width 300px
 
 </style>

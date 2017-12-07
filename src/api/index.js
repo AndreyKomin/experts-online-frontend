@@ -62,7 +62,5 @@ export function fetchUsers () {
 }
 
 export function updateMe (token, data) {
-  return axios.put(`http://0.0.0.0:7000/api/me/`, { ...data }, { headers: { 'Authorization': 'Bearer ' + token } }).then(response => {
-    return response
-  })
+  return axios.put(`http://0.0.0.0:7000/api/me/`, { ...data }, { headers: { 'Authorization': 'Bearer ' + token } })
 }

@@ -38,9 +38,8 @@ export default {
     return fetchUser(id).then(user => commit('SET_USER', { id, user }))
   },
 
-  UPDATE_ME: ({ state }, { ...data }) => {
-    console.log(data);
-    return updateMe(state.token, data)
+  UPDATE_ME: ({ state, commit }, { ...data }) => {
+    return updateMe(state.token, data).then(() => commit('SET_ME', { me: data }))
   },
 
   UPDATE_AVATAR: ({ commit }, { avatar }) => {
