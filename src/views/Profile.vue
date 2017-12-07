@@ -10,25 +10,24 @@
         </div>
       </div>
       <div class="right-side">
-        <h1>{{ me.first_name }} {{ me.last_name }}</h1>
-        <div class="mt20">
-          <b>Рейтинг:</b>
-          <ul>
-            <li>&#9733; {{ me.rating }} </li>
-          </ul>
-        </div>
-        <div class="labels">
+        <h1 class="name-heading">{{ me.first_name }} {{ me.last_name }} <svg-icon iconId="shield" v-if="!me.isExpert" class="icon-shield" aria-label="Является Экспертом" /></h1>
+        <div class="labels mt20">
         </div>
 
         <form v-on:submit.prevent="updateProfile()">
           <div class="form-group">
-            <label for="first_name">First Name</label>
+            <label for="first_name">Имя</label>
             <input id="first_name" type="text" class="form-control" v-model="me.first_name" />
           </div>
 
           <div class="form-group">
-            <label for="last_name">Last Name</label>
+            <label for="last_name">Фамилия</label>
             <input id="last_name" type="text" class="form-control" v-model="me.last_name" />
+          </div>
+
+          <div class="form-group">
+            <label for="login">Логин в системе ( <small><a :href="'https://эксперты-онлайн.рф/' + me.login" target="_blank">{{ 'https://эксперты-онлайн.рф/' + me.login }}</a></small> )</label>
+            <input id="login" type="text" class="form-control" v-model="me.login" />
           </div>
 
           <div class="form-group" v-for="messenger in me.available_messengers">
@@ -43,7 +42,7 @@
             <span class="custom-control-description">Разрешить прямое добавление (Пользователю будут показаны ваши контактные данные по запросу)</span>
           </label>
 
-          <button class="button" @click="updateProfile()">Сохранить</button>
+          <button class="button mt20" @click="updateProfile()">Сохранить</button>
         </form>
       </div>
 
@@ -86,15 +85,12 @@
     updateProfile() {
       this.UPDATE_ME({
         ...this.me
-      }).then((res) => {
-        console.log(res)
-//        this.$router.go(this.$router.currentRoute);
-      });
+      })
     },
     removeAvatar() {
       const avatar = null;
       this.UPDATE_AVATAR({ avatar });
-    }
+    },
   }
 }
 </script>
@@ -107,6 +103,9 @@
     button
       flex-basis 45%
 
+  .name-heading
+    display flex
+    align-items center
 
   .user-view
     display flex
@@ -122,4 +121,11 @@
   .avatar-image
     width 300px
 
+  .icon-shield
+    width 40px
+    height 40px
+    margin-left 10px
+
+  .mt20
+    margin-top 20px
 </style>

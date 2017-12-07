@@ -2,6 +2,13 @@ import axios from 'axios';
 import mockData from './mockData';
 import { capitalizeFirstLetter } from './mockFunc';
 
+import httpAdapter from 'axios/lib/adapters/http'
+
+const host = 'http://0.0.0.0:7000';
+
+axios.defaults.host = host;
+axios.defaults.adapter = httpAdapter;
+
 axios.interceptors.response.use(function (response) {
   return response;
 }, function (error) {
@@ -12,7 +19,7 @@ axios.interceptors.response.use(function (response) {
     originalRequest._retry = true;
 
     const token = window.localStorage.getItem('token');
-    return axios.put('http://0.0.0.0:7000/api/auth', { token })
+    return axios.put('/api/auth', { token })
       .then(({data}) => {
         window.localStorage.setItem('token', data.token);
         axios.defaults.headers.common['Authorization'] = 'Bearer ' + data.token;
