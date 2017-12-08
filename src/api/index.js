@@ -2,26 +2,22 @@ import axios from 'axios';
 import mockData from './mockData';
 import { capitalizeFirstLetter } from './mockFunc';
 
-import httpAdapter from 'axios/lib/adapters/http'
-
-const host = 'http://0.0.0.0:7000';
-
-axios.defaults.host = host;
-axios.defaults.adapter = httpAdapter;
 
 axios.interceptors.response.use(function (response) {
   return response;
 }, function (error) {
+
   const originalRequest = error.config;
 
-  if (error.response.status === 401 && !originalRequest._retry) {
-    debugger;
+  if (error.response.status === 401 && !originalRequest._retry && error.response.request.responseURL !== 'http://0.0.0.0:7000/api/auth') {
+
     originalRequest._retry = true;
 
-    const token = window.localStorage.getItem('token');
-    return axios.put('/api/auth', { token })
+    const token = window.localStorage.getItem('refreshToken');
+    return axios.put('http://0.0.0.0:7000/api/auth', { token })
       .then(({data}) => {
         window.localStorage.setItem('token', data.token);
+        window.localStorage.setItem('refreshToken', data.refreshToken);
         axios.defaults.headers.common['Authorization'] = 'Bearer ' + data.token;
         originalRequest.headers['Authorization'] = 'Bearer ' + data.token;
         return axios(originalRequest);

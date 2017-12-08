@@ -31,8 +31,8 @@
           </div>
 
           <div class="form-group" v-for="messenger in me.available_messengers">
-            <label for="telegram">Last Name</label>
-            <input id="telegram" type="text" class="form-control" v-model="messenger.messenger_unique_id" />
+            <label for="telegram">{{ messenger.messenger_id }}</label>
+            <input id="telegram" type="hidden" class="form-control" :value="messenger.messenger_unique_id" />
             <input type="hidden" v-model="messenger.code" :value="messenger.code">
           </div>
 
@@ -42,11 +42,18 @@
             <span class="custom-control-description">Разрешить прямое добавление (Пользователю будут показаны ваши контактные данные по запросу)</span>
           </label>
 
-          <button class="button mt20" @click="updateProfile()">Сохранить</button>
+          <div class="form-group">
+            <button class="button mt20" @click="updateProfile()">Сохранить</button>
+          </div>
+
+          <div class="form-group">
+            <button class="btn btn-success" @click="payModal = true">Оплатить консультацию</button>
+          </div>
         </form>
       </div>
 
       <avatar-modal :showModal="avatarModal" @close="avatarModal = false"></avatar-modal>
+      <pay-modal :showModal="payModal" @close="payModal = false"></pay-modal>
     </template>
   </div>
 </template>
@@ -56,6 +63,7 @@
   import { mapActions, mapGetters } from 'vuex';
   import svgIcon from 'components/base/SVG.vue'
   import avatarModal from 'components/AvatarModal.vue'
+  import payModal from 'components/payments/PayModal.vue'
   import UserImagePlaceholder from 'components/UserImagePlaceholder.vue'
 
   export default {
@@ -64,6 +72,7 @@
   components: {
     svgIcon,
     avatarModal,
+    payModal,
     UserImagePlaceholder
   },
 
@@ -74,7 +83,8 @@
   },
   data() {
     return {
-      avatarModal: false
+      avatarModal: false,
+      payModal: false
     }
   },
   methods: {
