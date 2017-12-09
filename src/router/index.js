@@ -24,7 +24,8 @@ export function createRouter () {
       { path: '/registration', component: Registration },
       { path: '/roadmap', component: Roadmap },
       { path: '/contacts', component: Contacts },
-      { path: '/search', component: SearchResults, props: (route) => ({ query: route.query.q }) },
+      { path: '/experts', component: SearchResults, props: (route) => ({ query: route.query.q }) },
+      { path: '/users', component: SearchResults, props: (route) => ({ query: route.query.q }) },
       { path: '/:userID', component: UserView },
     ]
   })

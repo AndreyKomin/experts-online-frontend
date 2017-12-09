@@ -87,6 +87,12 @@ export function fetchUsers () {
   });
 }
 
+export function search (searchQuery) {
+  return axios.get(`http://0.0.0.0:7000/api/search`, { params: { q: searchQuery } }).then(response => {
+    return response.data.data
+  });
+}
+
 export function updateMe (token, data) {
   return axios.put(`http://0.0.0.0:7000/api/me/`, { ...data }, { headers: { 'Authorization': 'Bearer ' + token } })
 }

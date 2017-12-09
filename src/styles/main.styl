@@ -1,16 +1,7 @@
-.button
+@import "variables.styl"
+
+.btn
   cursor pointer
-  background-color #5682a3
-  box-shadow 0 0 0 1px rgb(255, 255, 255)
-  border 1px solid #5682a3
-  border-radius 3px
-  padding 5px
-  display flex
-  align-items center
-  color white
-  font-weight 500
-  width 100%
-  text-align center
 
 .button-icon
   cursor pointer
@@ -45,3 +36,19 @@
     background-color #5cb85c
   &.dark
     background-color #337ab7
+
+
+.header
+  .btn-primary
+    background-color main-color
+    border-color main-color
+
+  .btn-primary:not([disabled]):not(.disabled).active,
+  .btn-primary:not([disabled]):not(.disabled):active,
+  .show>.btn-primary.dropdown-toggle,
+  .btn-primary:hover {
+    color: #fff;
+    background-color: lightness(main-color, 60%)
+    border-color:  lightness(main-color, 60%)
+    box-shadow: 0 0 0 0.2rem rgba(30, 152, 212,.5);
+  }

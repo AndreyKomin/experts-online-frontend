@@ -1,0 +1,18 @@
+main-color = #1e98d4
+main-width = 1024px
+header-height = 55px
+
+media_queries = {
+  mobile  : "only screen and (max-width: 576px)",
+  tablet  : "only screen and (min-width: 577px) and (max-width: 991px)",
+  desktop : "only screen and (min-width: 801px)"
+}
+
+responsive(breakpoints)
+  conditions = ()
+  for breakpoint in breakpoints
+    push(conditions, media_queries[breakpoint])
+  conditions = join(", ", conditions)
+  @media conditions
+    {block}
+

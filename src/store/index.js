@@ -14,6 +14,8 @@ export function createStore () {
       user: {},
       me: {},
       token: "",
+      searchQuery: "",
+      userToShow: {},
     },
     actions,
     mutations,

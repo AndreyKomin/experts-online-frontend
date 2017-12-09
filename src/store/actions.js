@@ -6,6 +6,7 @@ import {
   fetchUser,
   fetchUsers,
   updateMe,
+  search,
 } from '../api'
 
 export default {
@@ -34,6 +35,10 @@ export default {
     return fetchUsers().then(users => commit('SET_USERS', { users }))
   },
 
+  FETCH_SEARCH: ({ commit, state }) => {
+    return search(state.searchQuery).then(users => commit('SET_USERS', { users }))
+  },
+
   FETCH_USER: ({ commit }, { id }) => {
     return fetchUser(id).then(user => commit('SET_USER', { id, user }))
   },
@@ -44,5 +49,13 @@ export default {
 
   UPDATE_AVATAR: ({ commit }, { avatar }) => {
     return commit('SET_AVATAR', { avatar })
+  },
+
+  UPDATE_SEARCH: ({ commit }, { searchQuery }) => {
+    return commit('SET_SEARCH', { searchQuery })
+  },
+
+  SHOW_USER: ({ commit }, { id }) => {
+    return Promise.resolve(id).then((user) => commit('SET_USER_TO_SHOW', { user }))
   },
 }

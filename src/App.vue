@@ -50,10 +50,8 @@ a
   color #0088cc
   text-decoration none
 
-
-
 .view
-  max-width 800px
+  max-width main-width
   margin 0 auto
   position relative
 

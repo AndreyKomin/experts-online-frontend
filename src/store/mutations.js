@@ -19,8 +19,16 @@ export default {
     state.me.avatar = avatar;
   },
 
+  SET_SEARCH: (state, { searchQuery }) => {
+    state.searchQuery = searchQuery;
+  },
+
   SET_USERS: (state, { users }) => {
     state.users = users;
+  },
+
+  SET_USER_TO_SHOW: (state, { user }) => {
+    state.userToShow = user;
   },
 
   SET_USER: (state, { id, user }) => {
