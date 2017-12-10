@@ -1,0 +1,105 @@
+.avatar
+  img
+    width 100%
+    height 100%
+
+.item-body
+  display flex
+  flex-direction column
+  flex 1
+
+  h3
+    margin-top 0
+
+.item-link
+  display block
+  text-decoration none
+
+.title-group
+  display flex
+  justify-content space-between
+  align-items center
+  flex-wrap wrap
+  margin-bottom 7px;
+
+.title
+  display flex
+  align-items center
+  margin-right 60px;
+  margin-bottom 0
+
+  +responsive(mobile)
+    font-size 16px
+    margin-right 0
+
+.icon-shield
+  width 30px
+  height 30px
+  margin-left 10px
+  +responsive(mobile)
+    width 18px
+    height 18px
+    margin-left 5px
+
+.info
+  display flex
+  justify-content space-between
+  flex 1
+
+.portfolio
+  flex 1
+  white-space: pre-line;
+  font-size: 14px;
+  line-height: 16px;
+  overflow hidden
+  cursor pointer
+
+.price
+  +responsive(mobile)
+    font-size 12px
+
+.amount
+  font-size 24px
+  +responsive(mobile)
+    font-size 16px
+
+.price-flex
+  display flex
+  align-items center
+  svg
+    margin-left 5px
+    width 38px
+    height 38px
+
+    +responsive(mobile)
+      width 24px
+      height 24px
+
+  .price-time
+    margin-left 5px
+
+.buttons
+  margin-top 10px
+  margin-left 30px
+  max-width 300px
+  +responsive(mobile)
+    max-width 28px
+    margin-left 10px
+
+    .buttons-title
+      display none
+
+  .flex
+    display flex
+    align-items flex-start
+    justify-content flex-end
+
+  svg
+    width 32px
+    height 32px
+    +responsive(mobile)
+      width 24px
+      height 24px
+
+  .button-icon
+    margin-left 3px

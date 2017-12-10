@@ -1,3 +1,5 @@
+import { MESSENGERS } from '../config'
+
 export function host (url) {
   const host = url.replace(/^https?:\/\//, '').replace(/\/.*$/, '')
   const parts = host.split('.').slice(-3)
@@ -27,4 +29,8 @@ function pluralize (time, label) {
 export function getUserId (userID) {
   const match = /id(\d+)/g.exec(userID);
   return match[1];
+}
+
+export function getMessengerNameById (id) {
+  return MESSENGERS.filter(i => i.id === id)[0].code
 }

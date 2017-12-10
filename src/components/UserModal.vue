@@ -1,32 +1,129 @@
 <template>
-  <modal v-if="showModal" classnames="modal-avatar">
-    <h3 slot="header">Обновить фото профиля</h3>
-    <div slot="body">
-      <p>
-        <strong>Выберите новое фото</strong>
-      </p>
-      <div>
-        <a class="btn file-btn">
-          <span>Upload</span>
-          <input type="file" id="upload" value="Выберите файл" accept="image/*" @change="readFile($event)">
-        </a>
+  <modal v-if="showModal">
+
+    <div slot="header" class="title-group">
+      <h3 class="title">
+        {{ activeUser.first_name }} {{ activeUser.last_name }}
+        <svg-icon iconId="shield" v-if="activeUser.isExpert" class="icon-shield" aria-label="Является Экспертом" />
+      </h3>
+      <div class="price text-right">
+        <div class="price-flex" v-if="activeUser.price > 0">
+          <div class="amount">
+            <strong>{{ activeUser.price }}</strong>
+          </div>
+          <svg-icon iconId="ruble"></svg-icon>
+          <div class="price-time">/ минута</div>
+        </div>
+        <div class="price-flex" v-if="!activeUser.price">
+          <div class="amount">
+            <strong>Цена договорная</strong>
+          </div>
+        </div>
       </div>
     </div>
-    <div slot="footer" class="buttons">
-      <button class="btn btn-light" @click="$emit('close')">Отменить</button>
-      <button class="btn btn-info" v-if="fileAdded" @click="cropViaEvent()">Обновить</button>
+
+    <div slot="body">
+
+      <div v-show="tab === 'profile'">
+        <transition :name="transition">
+          <div class="row">
+            <div class="right-side col-3">
+              <div class="avatar">
+                <img :src="activeUser.avatar" :alt="activeUser.name">
+              </div>
+            </div>
+            <div class="item-body col-9">
+              <div class="info">
+                <div class="portfolio">{{ activeUser.portfolio }}</div>
+              </div>
+            </div>
+          </div>
+        </transition>
+      </div>
+
+      <div v-show="tab === 'contact'">
+        <transition :name="transition">
+          <div class="buttons">
+            <span class="buttons-title">Способы связи:</span>
+            <div v-for="messenger in activeUser.messengers" class="flex">
+              <button class="button-icon" :class="messengerName = getMessengerNameById(messenger.messenger_id)">
+                <svg-icon :iconId="'btn-' + messengerName"></svg-icon>
+              </button>
+            </div>
+          </div>
+        </transition>
+      </div>
+
+      <div v-show="tab === 'pay'">
+        <transition :name="transition">
+          <div>
+            <p>
+              <strong>Оплатить консультацию с помощью Яндекса</strong>
+            </p>
+            <div>
+              <img src="/public/img/yandex-money.png" alt="Yandex" class="yandex-logo">
+            </div>
+            <div>
+              <form method="POST" action="https://money.yandex.ru/quickpay/confirm.xml">
+                <input type="hidden" name="receiver" :value="activeUser.paymentInfo">
+                <input type="hidden" name="formcomment" value="Проект «Железный человек»: реактор холодного ядерного синтеза">
+                <input type="hidden" name="short-dest" value="Проект «Железный человек»: реактор холодного ядерного синтеза">
+                <input type="hidden" name="label" value="$order_id">
+                <input type="hidden" name="quickpay-form" value="donate">
+                <input type="hidden" name="targets" value="транзакция {order_id}">
+                <input type="hidden" name="sum" :value="totalPrice" data-type="number"> <input type="hidden" name="comment" value="Хотелось бы получить дистанционное управление.">
+                <input type="hidden" name="need-fio" value="true"> <input type="hidden" name="need-email" value="true">
+                <input type="hidden" name="need-phone" value="false"> <input type="hidden" name="need-address" value="false">
+                <div class="custom-controls-stacked">
+                  <label class="custom-control custom-radio">
+                    <input id="radioStacked3" name="paymentType" type="radio" class="custom-control-input" value="PC">
+                    <span class="custom-control-indicator"></span>
+                    <span class="custom-control-description">Яндекс.Деньгами</span>
+                  </label>
+                  <label class="custom-control custom-radio">
+                    <input id="radioStacked4" name="paymentType" type="radio" class="custom-control-input" value="AC">
+                    <span class="custom-control-indicator"></span>
+                    <span class="custom-control-description">Банковской картой</span>
+                  </label>
+                </div>
+
+                <div class="form-group">
+                  <label for="payTime">Какое количество минут хотите оплатить {{ activeUser.first_name }} {{ activeUser.last_name }}?</label>
+                  <div class="price-flex">
+                    <input id="payTime" type="text" class="form-control input-price" v-model="payTime" @input="recountPrice" maxlength="3"/>
+                    <div class="flex1"></div>
+                    <div class="price-time amount">Сумма: {{ totalPrice }}</div>
+                    <svg-icon iconId="ruble"></svg-icon>
+                  </div>
+                </div>
+
+                <input type="submit" value="Перевести" class="btn btn-success submit">
+              </form>
+            </div>
+          </div>
+        </transition>
+      </div>
+
+
+    </div>
+    <div slot="footer" class="footer-buttons">
+      <button class="btn btn-sm btn-success" @click="tab = 'profile'">Профиль</button>
+      <button class="btn btn-sm btn-primary" @click="tab = 'contact'">Связаться</button>
+      <button class="btn btn-sm btn-warning" @click="tab = 'pay'">Оплатить</button>
+      <button class="btn btn-sm btn-light" @click="$emit('close')">Закрыть</button>
     </div>
   </modal>
 </template>
 
 <script>
 
-  import { mapActions } from 'vuex';
-  import noSSR from 'vue-no-ssr'
+  import { mapActions, mapGetters } from 'vuex';
   import modal from '../components/Modal.vue';
+  import svgIcon from 'components/base/SVG.vue'
+  import { getMessengerNameById } from '../util/filters'
 
   export default {
-    name: "avatar",
+    name: "user-modal",
     props: {
       showModal: {
         type: Boolean,
@@ -34,56 +131,74 @@
     },
     components: {
       modal,
-      'no-ssr': noSSR
+      svgIcon,
     },
     data() {
       return {
-        show: false,
-        fileAdded: false,
-        options: {
-          format: 'jpeg',
-          circle: false,
-        }
+        tab: "profile",
+        transition: 'slide-right',
+        payTime: null,
+        totalPrice: 0,
       }
     },
+    computed: {
+      ...mapGetters([
+        'activeUser'
+      ])
+    },
     methods: {
-      ...mapActions([
-        'UPDATE_AVATAR',
-      ]),
-      readFile(event) {
-        this.fileAdded = true;
-        if (event.target.files && event.target.files[0]) {
-          const reader = new FileReader();
-          reader.onload = function (e) {
-            this.$refs.croppieRef.bind({
-              url: e.target.result,
-            })
-          }.bind(this);
-          reader.readAsDataURL(event.target.files[0]);
-        }
-        else {
-          alert("Sorry - you're browser doesn't support the FileReader API");
-        }
-      },
-      cropViaEvent() {
-        this.$refs.croppieRef.result(this.options);
-        this.$emit('close');
-        this.fileAdded = false;
-      },
-      result(avatar) {
-        this.UPDATE_AVATAR({ avatar });
-      },
+      ...{ getMessengerNameById },
+      recountPrice() {
+        this.totalPrice = this.payTime * this.activeUser.price
+      }
     }
   }
 </script>
 
 <style lang="stylus" scoped>
-  .buttons
+
+  @import "../styles/variables.styl"
+  @import "../styles/user.styl"
+
+  .footer-buttons
     display flex
     width 100%
     justify-content flex-end
 
     button
       margin-left 10px
+  .flex1
+    flex 1
+  .title-group
+    width 100%
+
+  .portfolio
+    font-size 16px
+    line-height normal
+    max-width 600px
+    cursor default
+
+  .buttons
+    margin 0 0 10px
+
+    button
+      text-decoration underline
+    svg
+      margin-top 10px
+      width 60px
+      height 60px
+      margin-right 7px
+
+    .flex
+      justify-content flex-start
+
+    .button-icon
+      margin-left 0
+
+  .yandex-logo
+    width 300px
+
+  .input-price
+    max-width 60px
 
 </style>

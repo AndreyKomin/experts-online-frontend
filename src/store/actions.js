@@ -54,8 +54,4 @@ export default {
   UPDATE_SEARCH: ({ commit }, { searchQuery }) => {
     return commit('SET_SEARCH', { searchQuery })
   },
-
-  SHOW_USER: ({ commit }, { id }) => {
-    return Promise.resolve(id).then((user) => commit('SET_USER_TO_SHOW', { user }))
-  },
 }

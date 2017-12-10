@@ -3,11 +3,20 @@
     <transition name="fade" mode="out-in">
       <div class="news-view">
         <div class="news-list-nav">
-          <router-link v-if="page > 1" :to="{ query: { page: page - 1 }}">&lt; Назад</router-link>
-          <a v-else class="disabled">&lt; Назад</a>
-          <span>{{ page }}/{{ maxPage }}</span>
-          <router-link v-if="hasMore" :to="{ query: { page: page + 1 }}">Вперед &gt;</router-link>
-          <a v-else class="disabled">Вперед &gt;</a>
+          <div class="container">
+            <div class="row">
+              <div class="col-sm-6">
+                <h2 class="page-title">{{ getPageTitle() }} ({{displayedItems.length}})</h2>
+              </div>
+              <div class="col-sm-6 navigation">
+                <router-link v-if="page > 1" :to="{ query: { page: page - 1 }}">&lt; Назад</router-link>
+                <a v-else class="disabled">&lt; Назад</a>
+                <span>{{ page }}/{{ maxPage }}</span>
+                <router-link v-if="hasMore" :to="{ query: { page: page + 1 }}">Вперед &gt;</router-link>
+                <a v-else class="disabled">Вперед &gt;</a>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div class="container">
@@ -34,14 +43,13 @@
           <transition :name="transition">
             <div class="news-list" :key="displayedPage" v-if="displayedPage > 0">
               <transition-group tag="ul" name="item">
-                <item v-for="item in displayedItems" :key="item.id" :item="item">
+                <item v-for="item in displayedItems" :key="item.id" :item="item" @openUser="openUser">
                 </item>
               </transition-group>
             </div>
           </transition>
 
           <user-modal :showModal="userModal" @close="userModal = false"></user-modal>
-
         </div>
       </div>
     </transition>
@@ -85,10 +93,6 @@ export default {
       const { itemsPerPage, users } = this.$store.state;
       return Math.ceil(users.length / itemsPerPage) || 1
     },
-    userToShow () {
-      const { userToShow } = this.$store.state;
-      return userToShow
-    },
     hasMore () {
       return this.page < this.maxPage
     }
@@ -99,9 +103,6 @@ export default {
   },
 
   watch: {
-    userToShow () {
-      this.userModal = true
-    },
     page (to, from) {
       this.loadItems(to, from)
     },
@@ -112,6 +113,7 @@ export default {
 
   methods: {
     ...mapActions([
+      'FETCH_USER',
       'FETCH_USERS',
       'UPDATE_SEARCH',
       'FETCH_SEARCH'
@@ -140,7 +142,6 @@ export default {
       this.displayedPage = to;
       this.itemsLoaded = true;
       this.displayedItems = this.$store.getters.activeItems;
-      console.log(this.displayedItems)
       this.$bar.finish();
     },
 
@@ -152,21 +153,35 @@ export default {
     resetSearch() {
       this.searchQuery = "";
       this.startSearch()
+    },
+    openUser(user_id) {
+      this.FETCH_USER({ id: user_id }).then(() => {
+        this.userModal = true;
+      });
+    },
+    getPageTitle() {
+      return (this.$route.path.indexOf("experts") > -1) ? "Эксперты" : "Пользователи";
     }
   }
 }
 </script>
 
 <style lang="stylus">
+
+@import "../styles/variables.styl";
+
 .news-view
   padding-top 65px
+  +responsive(mobile)
+    padding-top 78px
 
 .news-list-nav, .news-list
   background-color #fff
   border-radius 2px
 
 .news-list-nav
-  padding 15px 30px
+  padding-top 15px
+  padding-bottom 15px
   position fixed
   text-align center
   top 55px
@@ -174,6 +189,7 @@ export default {
   right 0
   z-index 998
   box-shadow 0 1px 2px rgba(0,0,0,.1)
+
   a
     margin 0 1em
   .disabled
@@ -224,7 +240,6 @@ export default {
   height 20px
   fill: gray
 
-
 @media (max-width 600px)
   .news-list
     margin 10px 0
@@ -233,4 +248,17 @@ export default {
   padding 40px 20px
   text-align center
   font-size 36px
+
+.page-title
+  font-size 24px
+  line-height 1
+  margin-bottom 0
+  text-align left
+
+  +responsive(mobile)
+    font-size 16px
+
+.navigation
+  text-align right
+
 </style>

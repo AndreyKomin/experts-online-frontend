@@ -2,45 +2,46 @@
   <div class="root">
 
     <header class="header">
-      <nav class="inner">
-        <router-link class="logo" to="/">
-          <svg-icon iconId="mortarboard" class="icon"></svg-icon>
-          <div class="text">
-            <h1 class="title">Эксперты онлайн</h1>
-            <span class="subtitle">Консультационный проект</span>
-          </div>
-        </router-link>
-        <div class="nav-container" :class="{ 'open': mobileMenu }">
-          <router-link class="menu-item" to="/experts"><span>Эксперты</span></router-link>
-          <router-link class="menu-item" to="/users"><span>Пользователи</span></router-link>
-          <router-link class="menu-item" to="/registration"><span>Вступить в сообщество</span></router-link>
-          <router-link class="menu-item" to="/contacts"><span>Информация</span></router-link>
-          <div class="flex1"></div>
-          <!--<ExpertsFilter v-if="$route.path === '/search'" />-->
-
-          <div class="btn-group" v-if="me.login">
-            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Привет, {{ me.first_name }} {{ me.last_name }}
-            </button>
-            <div class="dropdown-menu dropdown-menu-right">
-              <router-link class="dropdown-item" to="/profile">Профиль</router-link>
-              <div class="dropdown-divider"></div>
-              <button class="dropdown-item" @click="logout()" href="#">Выход</button>
+      <div class="container">
+        <nav class="inner">
+          <router-link class="logo" to="/">
+            <svg-icon iconId="mortarboard" class="icon"></svg-icon>
+            <div class="text">
+              <h1 class="title">Эксперты онлайн</h1>
+              <span class="subtitle">Консультации от профессионалов</span>
             </div>
+          </router-link>
+          <div class="nav-container" :class="{ 'open': mobileMenu }">
+            <router-link class="menu-item" to="/experts"><span>Эксперты</span></router-link>
+            <router-link class="menu-item" to="/users"><span>Пользователи</span></router-link>
+            <router-link class="menu-item" to="/registration"><span>Вступить в сообщество</span></router-link>
+            <router-link class="menu-item" to="/contacts"><span>Информация</span></router-link>
+            <div class="flex1"></div>
+            <!--<ExpertsFilter v-if="$route.path === '/search'" />-->
+
+            <div class="btn-group" v-if="me.login">
+              <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Привет, {{ me.first_name }}
+              </button>
+              <div class="dropdown-menu dropdown-menu-right">
+                <router-link class="dropdown-item" to="/profile">Профиль</router-link>
+                <div class="dropdown-divider"></div>
+                <button class="dropdown-item" @click="logout()" href="#">Выход</button>
+              </div>
+            </div>
+
+            <button v-if="!me.login" @click="showAuth = true" class="btn btn-primary">
+              Вход
+            </button>
           </div>
+          <button class="btn btn-primary btn-mobile-menu" @click="mobileMenu = !mobileMenu">Меню</button>
+        </nav>
 
-          <button v-if="!me.login" @click="showAuth = true" class="btn btn-primary">
-            Вход
-          </button>
-        </div>
-        <button class="btn btn-primary btn-mobile-menu" @click="mobileMenu = !mobileMenu">Меню</button>
-      </nav>
-
-      <Auth
-          v-if="showAuth"
-          @close="showAuth = false"
-      ></Auth>
-
+        <Auth
+            v-if="showAuth"
+            @close="showAuth = false"
+        ></Auth>
+      </div>
     </header>
 
   </div>
@@ -92,12 +93,11 @@
     align-items center
     color white
     text-decoration none
-
+    margin-right 60px
 
     .text
       display flex
       flex-direction column
-      margin-right 60px
 
     .title
       font-size 16px
@@ -124,11 +124,13 @@
     left 0
     right 0
 
+    .container
+      height: 100%;
+
     .inner
       max-width main-width
       box-sizing border-box
       margin 0 auto
-      padding 0 5px
       display flex
       justify-content space-between
       position relative
@@ -176,7 +178,7 @@
     display inline-block
     vertical-align middle
     font-weight 400
-    margin-right 1.8em
+    margin-right 1.4em
 
     &:hover
       color #fff

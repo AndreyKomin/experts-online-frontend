@@ -61,16 +61,4 @@ a
 .fade-enter, .fade-leave-active
   opacity 0
 
-@media (max-width 860px)
-  .header .inner
-    padding 15px 30px
-
-@media (max-width 600px)
-  .header
-    .inner
-      padding 15px
-    a
-      margin-right 1em
-    .github
-      display none
 </style>

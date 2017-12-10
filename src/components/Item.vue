@@ -1,36 +1,53 @@
 <template>
   <li class="search-item row">
-      <div class="avatar col-3">
-        <a href="#" v-on:click.prevent="showUser()" class="item-link">
-          <img :src="item.avatar" :alt="item.name">
-        </a>
-      </div>
-      <div class="item-body col-9">
-        <div class="title-group">
-          <h3 class="title">
-            <a href="#" v-on:click.prevent="showUser()">
-              {{ item.first_name }} {{ item.last_name }}
-            </a>
-            <svg-icon iconId="shield" v-if="!item.isExpert" class="icon-shield" aria-label="Является Экспертом" />
-          </h3>
-          <div class="price">
-            <strong>Консультация: от {{ item.price * 5 }} руб.</strong>
+    <div class="avatar col-3 col-md-2">
+      <a href="#" @click.prevent="showUser(item.id)" class="item-link">
+        <img :src="item.avatar" :alt="item.name">
+      </a>
+    </div>
+    <div class="item-body col-9 col-md-10">
+      <div class="title-group">
+        <h3 class="title">
+          <a href="#" @click.prevent="showUser(item.id)">
+            {{ item.first_name }} {{ item.last_name }}
+          </a>
+          <svg-icon iconId="shield" v-if="item.isExpert" class="icon-shield" aria-label="Является Экспертом" />
+        </h3>
+
+        <div class="price text-right">
+          <div class="price-flex" v-if="item.price > 0">
+            <div class="amount">
+              <strong>{{ item.price }}</strong>
+            </div>
+            <svg-icon iconId="ruble"></svg-icon>
+            <div class="price-time">/ минута</div>
+          </div>
+          <div class="price-flex" v-if="!item.price">
+            <div class="amount">
+              <strong>Цена договорная</strong>
+            </div>
           </div>
         </div>
-        <div class="info">
-          <div class="portfolio">
-            {{ item.portfolio }}
+      </div>
+      <div class="info">
+        <div @click="showUser(item.id)" class="portfolio" :class="{ 'active' : mouseOver }">{{ item.portfolio }}</div>
+        <div class="buttons text-right">
+          <span class="buttons-title">Способы связи:</span>
+          <div v-for="messenger in item.messengers" class="flex">
+            <button class="button-icon" :class="messengerName = getMessengerNameById(messenger.messenger_id)">
+              <svg-icon :iconId="'btn-' + messengerName"></svg-icon>
+            </button>
           </div>
         </div>
       </div>
-      <span class="label" v-if="item.type !== 'story'">{{ item.type }}</span>
+    </div>
   </li>
 </template>
 
 <script>
 
-import { mapActions } from 'vuex'
-import { timeAgo } from '../util/filters'
+import { RECOMMEND_TIME_MINUTES } from './../config'
+import { timeAgo, getMessengerNameById } from '../util/filters'
 import svgIcon from 'components/base/SVG.vue'
 
 export default {
@@ -40,15 +57,19 @@ export default {
   serverCacheKey: ({ item: { id, __lastUpdated, time }}) => {
     return `${id}::${__lastUpdated}::${timeAgo(time)}`
   },
+  data () {
+    return {
+      consultRecommendTime: RECOMMEND_TIME_MINUTES,
+      mouseOver: false,
+    }
+  },
   components: {
     svgIcon
   },
   methods: {
-    ...mapActions([
-      'SHOW_USER',
-    ]),
-    showUser() {
-      this.SHOW_USER(this.item.id);
+    ...{ getMessengerNameById },
+    showUser(userId) {
+      this.$emit('openUser', userId)
     }
   }
 }
@@ -58,10 +79,7 @@ export default {
 
   @import "../styles/variables.styl"
 
-  .avatar
-    img
-      width 100%
-      height 100%
+  search-item-max-height = 172px
 
   .search-item
     background-color #fff
@@ -69,10 +87,9 @@ export default {
     border-bottom 1px solid #eee
     position relative
     line-height 20px
-    padding-top 1px
-    padding-bottom 1px
-    +responsive(mobile)
-      align-items center
+    padding-top 15px
+    padding-bottom 15px
+    max-height search-item-max-height
 
     .meta, .host
       font-size .85em
@@ -83,59 +100,6 @@ export default {
         &:hover
           color #ff6600
 
-  .item-body
-    display flex
-    flex-direction column
-    flex 1
-
-    h3
-      margin-top 0
-
-  .item-link
-    display block
-    text-decoration none
-
-  .title-group
-    display flex
-    justify-content space-between
-    align-items center
-    flex-wrap wrap
-    margin-bottom 20px;
-    margin-top 5px
-
-    +responsive(mobile)
-      margin-bottom 10px;
-
-  .title
-    display flex
-    align-items center
-    margin-right 60px;
-    margin-bottom 0
-
-    +responsive(mobile)
-      font-size 16px
-      margin-right 0
-
-  .icon-shield
-    width 30px
-    height 30px
-    margin-left 10px
-    +responsive(mobile)
-      width 18px
-      height 18px
-      margin-left 5px
-
-  .info
-    display flex
-    justify-content space-between
-
-  .portfolio
-    flex 1
-    white-space: pre-line;
-
-  .price
-    +responsive(mobile)
-      font-size 12px
-
+  @import "../styles/user.styl"
 
 </style>

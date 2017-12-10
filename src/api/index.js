@@ -71,14 +71,9 @@ export function fetchMe (token) {
 }
 
 export function fetchUser (id) {
-  return axios.get(`https://randomuser.me/api/`).then(response => {
-    return response.data.results.map((e, i) => {
-      e.id = 1;
-      e.name = capitalizeFirstLetter(e.name.first) + " " +  capitalizeFirstLetter(e.name.last);
-      e.url = '/id' + i;
-      return e;
-    })[0];
-  })
+  return axios.get(`http://0.0.0.0:7000/api/users/${id}`).then(response => {
+    return response.data.data
+  });
 }
 
 export function fetchUsers () {

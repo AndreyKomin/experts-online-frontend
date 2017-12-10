@@ -27,10 +27,6 @@ export default {
     state.users = users;
   },
 
-  SET_USER_TO_SHOW: (state, { user }) => {
-    state.userToShow = user;
-  },
-
   SET_USER: (state, { id, user }) => {
     state.user = user || false; /* false means user not found */
   }

@@ -1,5 +1,8 @@
 @import "variables.styl"
 
+.container
+  max-width main-width
+
 .btn
   cursor pointer
 
@@ -11,8 +14,6 @@
   display flex
   align-items center
   justify-content center
-
-
 
 .label
   display: inline;
@@ -37,18 +38,16 @@
   &.dark
     background-color #337ab7
 
+.btn-primary
+  background-color main-color
+  border-color main-color
+  max-width 200px
 
-.header
-  .btn-primary
-    background-color main-color
-    border-color main-color
-
-  .btn-primary:not([disabled]):not(.disabled).active,
-  .btn-primary:not([disabled]):not(.disabled):active,
-  .show>.btn-primary.dropdown-toggle,
-  .btn-primary:hover {
-    color: #fff;
-    background-color: lightness(main-color, 60%)
-    border-color:  lightness(main-color, 60%)
-    box-shadow: 0 0 0 0.2rem rgba(30, 152, 212,.5);
-  }
+.btn-primary:not([disabled]):not(.disabled).active,
+.btn-primary:not([disabled]):not(.disabled):active,
+.show>.btn-primary.dropdown-toggle,
+.btn-primary:hover
+  color: #fff;
+  background-color: lightness(main-color, 60%)
+  border-color:  lightness(main-color, 60%)
+  box-shadow: 0 0 0 0.2rem rgba(30, 152, 212,.5);
