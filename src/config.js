@@ -1,4 +1,4 @@
-export const apiUrl = (process.env.NODE_ENV !== 'production') ? `http://0.0.0.0:7000` : `http://api.эксперты-онлайн.рф`;
+export const apiUrl = (process.env.NODE_ENV !== 'production') ? `http://0.0.0.0:7000` : `api.xn----8sbnsbindehmjq0kxa.xn--p1ai`;
 export const PORTFOLIO_MAX = 600;
 export const RECOMMEND_TIME_MINUTES = 15;
 
