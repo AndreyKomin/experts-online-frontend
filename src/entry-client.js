@@ -33,7 +33,7 @@ Vue.use(VueAuthenticate, {
   providers: {
     facebook: {
       name: 'facebook',
-      url: '/api/auth?provider=facebook',
+      url: '/auth?provider=facebook',
       authorizationEndpoint: 'https://www.facebook.com/v2.5/dialog/oauth',
       redirectUri: window.location.origin + '/',
       requiredUrlParams: ['display', 'scope'],
@@ -47,7 +47,7 @@ Vue.use(VueAuthenticate, {
 
     google: {
       name: 'google',
-      url: '/auth_success?provider=google',
+      url: '/auth?provider=google',
       authorizationEndpoint: 'https://accounts.google.com/o/oauth2/auth',
       redirectUri: window.location.origin,
       requiredUrlParams: ['scope'],
@@ -63,7 +63,7 @@ Vue.use(VueAuthenticate, {
 
     vk: {
       name: 'vk',
-      url: '/api/auth?provider=vk',
+      url: '/auth?provider=vk',
       authorizationEndpoint: 'https://oauth.vk.com/authorize',
       redirectUri: window.location.origin,
       requiredUrlParams: ['scope'],
