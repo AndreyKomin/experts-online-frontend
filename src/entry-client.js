@@ -4,6 +4,7 @@ import VueCroppie from 'vue-croppie';
 import 'es6-promise/auto'
 import { createApp } from './app'
 import ProgressBar from './components/ProgressBar.vue'
+import { apiUrl } from './config'
 
 // global progress bar
 const bar = Vue.prototype.$bar = new Vue(ProgressBar).$mount()
@@ -27,7 +28,7 @@ Vue.mixin({
 Vue.use(VueCroppie);
 
 Vue.use(VueAuthenticate, {
-  baseUrl: 'http://0.0.0.0:7000', // Your API domain
+  baseUrl: apiUrl, // Your API domain
 
   providers: {
     facebook: {

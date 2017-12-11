@@ -1,9 +1,7 @@
 import axios from 'axios';
 import mockData from './mockData';
 import { capitalizeFirstLetter } from './mockFunc';
-
-
-const apiUrl = (process.env.NODE_ENV !== 'production') ? `http://0.0.0.0:7000` : `http://api.эксперты-онлайн.рф`;
+import { apiUrl } from './../config';
 
 axios.interceptors.response.use(function (response) {
   return response;
