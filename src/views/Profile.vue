@@ -3,13 +3,16 @@
     <template v-if="me">
       <div class="row">
         <div class="col-lg-4 text-center">
-          <user-image-placeholder class="avatar-image" v-if="!me.avatar"></user-image-placeholder>
           <a href="" v-on:click.prevent="avatarModal = true">
-            <img v-if="me.avatar" class="avatar-image" :src="me.avatar" alt="Avatar">
+            <Avatar class="avatar-image" :src="me.avatar" :alt="`${me.first_name} ${me.last_name}`" />
           </a>
           <div class="buttons">
             <button class="btn btn-primary" @click="avatarModal = true">Обновить фото</button>
             <button class="btn btn-light" @click="removeAvatar()">Удалить фото</button>
+          </div>
+
+          <div class="profile-progress progress">
+            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" :aria-valuenow="progress.portfolio + progress.avatar + progress.contacts" aria-valuemin="0" aria-valuemax="100" :style="`width: ${progress.portfolio + progress.avatar + progress.contacts}%`"></div>
           </div>
 
           <div class="messengers">
@@ -46,7 +49,7 @@
             </div>
 
             <div class="form-group">
-              <label for="login">Логин в системе ( <small><a :href="'https://эксперты-онлайн.рф/' + me.login" target="_blank">{{ 'https://эксперты-онлайн.рф/' + me.login }}</a></small> )</label>
+              <label for="login">Логин в системе ( <small><a :href="'https://эксперты-онлайн.рф/' + me.login" target="_blank">{{ 'http://эксперты-онлайн.рф/' + me.login }}</a></small> )</label>
               <input id="login" type="text" class="form-control" v-model="me.login" maxlength="32" />
             </div>
 
@@ -58,51 +61,68 @@
 
             <div class="form-group" v-if="recountPortfolio()">
               <label for="portfolio">Портфолио (<small>Макс. {{ portfolioMax }} символов {{ portfolio ? ', осталось ' + (portfolioMax - portfolio) : '' }}</small>)</label>
-              <textarea id="portfolio" type="text" class="form-control" rows="6" v-model="me.portfolio" @input="recountPortfolio" placeholder="Опишите ваш опыт и деятельность. По данному тексту будет осуществляться поиск." maxlength="600"></textarea>
+              <textarea id="portfolio" type="text" class="form-control" rows="6" v-model="me.portfolio" @input="recountPortfolio" placeholder="Опишите ваш опыт и деятельность. По данному тексту будет осуществляться поиск." :maxlength="portfolioMax"></textarea>
             </div>
 
-            <div class="row">
-              <div class="col-sm-6">
-                <div class="form-group" v-if="recountPrice()">
-                  <label for="price">Стоимось минуты разговора с Вами
-                    <br>
-                    <small>Стоимость 15-ти минутной консультации ~ {{ price * recommendTime }} руб.</small>
-                  </label>
-                  <div class="price-flex">
-                    <svg-icon iconId="ruble"></svg-icon>
-                    <div class="price-time">/ минута</div>
-                    <input id="price" type="text" class="form-control input-price" v-model="me.price" @input="recountPrice"/>
+            <div class="form-group" v-if="recountWantEarn()">
+              <label class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" v-model="me.wantEarn" @change="recountWantEarn(!me.wantEarn)">
+                <span class="custom-control-indicator"></span>
+                <span class="custom-control-description">Хочу зарабатывать</span>
+              </label>
+            </div>
+
+            <div v-if="wantEarn">
+              <div class="row">
+                <div class="col-sm-6">
+                  <div class="form-group" v-if="recountPrice()">
+                    <label for="price">Стоимось минуты разговора с Вами
+                      <br>
+                      <small>Стоимость 15-ти минутной консультации ~ {{ price * recommendTime }} руб.</small>
+                    </label>
+                    <div class="price-flex">
+                      <svg-icon iconId="ruble"></svg-icon>
+                      <div class="price-time">/ минута</div>
+                      <input id="price" type="text" class="form-control input-price" v-model="me.price" @input="recountPrice"/>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <div class="d-none d-sm-block"><br></div>
+                    <label class="custom-control custom-radio">
+                      <input id="paymentType" name="paymentType" type="radio" class="custom-control-input">
+                      <span class="custom-control-indicator"></span>
+                      <span class="custom-control-description">Постоплата</span>
+                    </label>
+                    <label class="custom-control custom-radio">
+                      <input id="radio2" name="paymentType" type="radio" class="custom-control-input">
+                      <span class="custom-control-indicator"></span>
+                      <span class="custom-control-description">Предоплата</span>
+                    </label>
                   </div>
                 </div>
               </div>
-              <div class="col-sm-6">
-                <div class="form-group">
-                  <div class="d-none d-sm-block"><br></div>
-                  <label class="custom-control custom-radio">
-                    <input id="paymentType" name="paymentType" type="radio" class="custom-control-input">
-                    <span class="custom-control-indicator"></span>
-                    <span class="custom-control-description">Постоплата</span>
-                  </label>
-                  <label class="custom-control custom-radio">
-                    <input id="radio2" name="paymentType" type="radio" class="custom-control-input">
-                    <span class="custom-control-indicator"></span>
-                    <span class="custom-control-description">Предоплата</span>
-                  </label>
+
+              <div class="payment-group">
+                <div class="flex1">
+                  <div class="form-group">
+                    <label for="paymentInfo">Яндекс кошелёк</label>
+                    <input id="paymentInfo" type="text" class="form-control" v-model="me.paymentInfo" maxlength="64" placeholder="41001xxxxxxxxxxxx" />
+                  </div>
+                </div>
+                <div>
+                  <div class="form-group">
+                    <label>&nbsp;</label>
+                    <button class="btn btn-success" @click="payModal = true">Тест оплаты</button>
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <div class="form-group">
-              <label for="paymentInfo">Яндекс кошелёк</label>
-              <input id="paymentInfo" type="text" class="form-control" v-model="me.paymentInfo" maxlength="64" placeholder="41001xxxxxxxxxxxx" />
             </div>
 
             <div class="form-group text-right">
               <button class="btn btn-primary" @click="updateProfile()">Сохранить</button>
-            </div>
-
-            <div class="form-group">
-              <button class="btn btn-success" @click="payModal = true">Тест оплаты</button>
             </div>
           </form>
         </div>
@@ -124,7 +144,7 @@
   import svgIcon from 'components/base/SVG.vue'
   import avatarModal from 'components/AvatarModal.vue'
   import payModal from 'components/payments/PayModal.vue'
-  import UserImagePlaceholder from 'components/UserImagePlaceholder.vue'
+  import Avatar from 'components/Avatar.vue'
 
   export default {
   name: 'profile',
@@ -133,7 +153,7 @@
     svgIcon,
     avatarModal,
     payModal,
-    UserImagePlaceholder
+    Avatar,
   },
 
   computed: {
@@ -145,10 +165,16 @@
     return {
       avatarModal: false,
       payModal: false,
+      wantEarn: false,
       portfolioMax: PORTFOLIO_MAX,
       recommendTime: RECOMMEND_TIME_MINUTES,
       portfolio: 0,
       price: 0,
+      progress: {
+        portfolio: 0,
+        avatar: 0,
+        contacts: 0
+      },
       contacts: {
         telegram: false,
         skype: false,
@@ -157,6 +183,20 @@
         google: false,
       }
     }
+  },
+  watch: {
+    portfolio(val) {
+      if (val >= 50) {
+        this.progress.portfolio = 30
+      }
+    },
+    me(val) {
+      if (val.avatar && val.avatar.length > 0) {
+        this.progress.avatar = 30
+      } else {
+        this.progress.avatar = 0
+      }
+    },
   },
   methods: {
     ...mapActions([
@@ -179,6 +219,10 @@
     recountPrice() {
       this.price = this.me.price;
       return true;
+    },
+    recountWantEarn() {
+      this.wantEarn = this.me.wantEarn;
+      return true;
     }
   }
 }
@@ -186,6 +230,9 @@
 
 <style lang="stylus" scoped>
   @import "../styles/variables.styl"
+
+  .profile-progress
+    margin-top 20px
 
   .buttons
     margin-top 20px
@@ -256,4 +303,13 @@
     text-align left
     h3
       font-size 24px
+
+  .payment-group
+    display flex
+
+    .flex1
+      flex 1
+      margin-right 20px
+    button
+      width 100%
 </style>

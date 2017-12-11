@@ -14,11 +14,6 @@
           <svg-icon iconId="ruble"></svg-icon>
           <div class="price-time">/ минута</div>
         </div>
-        <div class="price-flex" v-if="!activeUser.price">
-          <div class="amount">
-            <strong>Цена договорная</strong>
-          </div>
-        </div>
       </div>
     </div>
 
@@ -29,7 +24,7 @@
           <div class="row">
             <div class="right-side col-3">
               <div class="avatar">
-                <img :src="activeUser.avatar" :alt="activeUser.name">
+                <Avatar :src="activeUser.avatar" :alt="`${activeUser.first_name} ${activeUser.last_name}`" />
               </div>
             </div>
             <div class="item-body col-9">
@@ -57,13 +52,13 @@
       <div v-show="tab === 'pay'">
         <transition :name="transition">
           <div>
-            <p>
-              <strong>Оплатить консультацию с помощью Яндекса</strong>
-            </p>
-            <div>
-              <img src="/public/img/yandex-money.png" alt="Yandex" class="yandex-logo">
-            </div>
-            <div>
+            <div v-if="activeUser.paymentInfo">
+              <p>
+                <strong>Оплатить консультацию с помощью Яндекса</strong>
+              </p>
+              <div>
+                <img src="/public/img/yandex-money.png" alt="Yandex" class="yandex-logo">
+              </div>
               <form method="POST" action="https://money.yandex.ru/quickpay/confirm.xml">
                 <input type="hidden" name="receiver" :value="activeUser.paymentInfo">
                 <input type="hidden" name="formcomment" value="Проект «Железный человек»: реактор холодного ядерного синтеза">
@@ -100,6 +95,10 @@
                 <input type="submit" value="Перевести" class="btn btn-success submit">
               </form>
             </div>
+            <div v-else>
+              У пользователя {{ activeUser.first_name }} {{ activeUser.last_name }} не указан кошелек.
+            </div>
+
           </div>
         </transition>
       </div>
@@ -107,9 +106,9 @@
 
     </div>
     <div slot="footer" class="footer-buttons">
-      <button class="btn btn-sm btn-success" @click="tab = 'profile'">Профиль</button>
-      <button class="btn btn-sm btn-primary" @click="tab = 'contact'">Связаться</button>
-      <button class="btn btn-sm btn-warning" @click="tab = 'pay'">Оплатить</button>
+      <button class="btn btn-sm btn-success" v-show="tab !== 'profile'" @click="tab = 'profile'">Профиль</button>
+      <button class="btn btn-sm btn-primary" v-show="tab !== 'contact'" @click="tab = 'contact'">Связаться</button>
+      <button class="btn btn-sm btn-warning" v-show="tab !== 'pay'" @click="tab = 'pay'">Оплатить</button>
       <button class="btn btn-sm btn-light" @click="$emit('close')">Закрыть</button>
     </div>
   </modal>
@@ -118,8 +117,9 @@
 <script>
 
   import { mapActions, mapGetters } from 'vuex';
-  import modal from '../components/Modal.vue';
+  import modal from 'components/Modal.vue';
   import svgIcon from 'components/base/SVG.vue'
+  import Avatar from 'components/Avatar.vue'
   import { getMessengerNameById } from '../util/filters'
 
   export default {
@@ -132,6 +132,7 @@
     components: {
       modal,
       svgIcon,
+      Avatar,
     },
     data() {
       return {
@@ -180,6 +181,13 @@
 
   .buttons
     margin 0 0 10px
+    display flex
+    flex-wrap wrap
+    justify-content center
+
+    .buttons-title
+      width 100%
+      text-align center
 
     button
       text-decoration underline

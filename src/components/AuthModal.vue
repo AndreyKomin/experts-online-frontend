@@ -3,15 +3,15 @@
     <h3 slot="header">Вход / Регистрация</h3>
     <div slot="body">
       <div class="oauth">
-        <button class="button oauth-button oauth-vk" @click="oauthenticate('vk')">
+        <button class="btn oauth-button oauth-vk" @click="oauthenticate('vk')">
           <svg-icon iconId="vk"></svg-icon>
           <span>Продолжить с Вконтакте</span>
         </button>
-        <button class="button oauth-button oauth-google" @click="oauthenticate('google')">
+        <button class="btn oauth-button oauth-google" @click="oauthenticate('google')">
           <svg-icon iconId="google"></svg-icon>
           <span>Продолжить с Google</span>
         </button>
-        <button class="button oauth-button oauth-facebook" @click="oauthenticate('facebook')">
+        <button class="btn oauth-button oauth-facebook" @click="oauthenticate('facebook')">
           <svg-icon iconId="facebook"></svg-icon>
           <span>Продолжить с Facebook</span>
         </button>
@@ -86,7 +86,6 @@ export default {
 <style lang="stylus" scoped>
 
   .oauth
-    margin-top 20px
 
     svg
       width: 20px
@@ -99,6 +98,8 @@ export default {
       align-items center
 
     &-button
+      margin-bottom 5px
+      width 100%
       cursor pointer
       background none
       display flex

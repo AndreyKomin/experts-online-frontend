@@ -2,7 +2,7 @@
   <li class="search-item row">
     <div class="avatar col-3 col-md-2">
       <a href="#" @click.prevent="showUser(item.id)" class="item-link">
-        <img :src="item.avatar" :alt="item.name">
+        <Avatar :src="item.avatar" :alt="`${item.first_name} ${item.last_name}`" />
       </a>
     </div>
     <div class="item-body col-9 col-md-10">
@@ -21,11 +21,6 @@
             </div>
             <svg-icon iconId="ruble"></svg-icon>
             <div class="price-time">/ минута</div>
-          </div>
-          <div class="price-flex" v-if="!item.price">
-            <div class="amount">
-              <strong>Цена договорная</strong>
-            </div>
           </div>
         </div>
       </div>
@@ -49,6 +44,7 @@
 import { RECOMMEND_TIME_MINUTES } from './../config'
 import { timeAgo, getMessengerNameById } from '../util/filters'
 import svgIcon from 'components/base/SVG.vue'
+import Avatar from 'components/Avatar.vue'
 
 export default {
   name: 'search-item',
@@ -64,7 +60,8 @@ export default {
     }
   },
   components: {
-    svgIcon
+    svgIcon,
+    Avatar,
   },
   methods: {
     ...{ getMessengerNameById },

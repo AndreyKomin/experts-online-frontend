@@ -14,7 +14,7 @@
           <div class="nav-container" :class="{ 'open': mobileMenu }">
             <router-link class="menu-item" to="/experts"><span>Эксперты</span></router-link>
             <router-link class="menu-item" to="/users"><span>Пользователи</span></router-link>
-            <router-link class="menu-item" to="/registration"><span>Вступить в сообщество</span></router-link>
+            <a href="#" v-if="!me.login" @click="showAuth = true" class="menu-item"><span>Вступить в сообщество</span></a>
             <router-link class="menu-item" to="/contacts"><span>Информация</span></router-link>
             <div class="flex1"></div>
             <!--<ExpertsFilter v-if="$route.path === '/search'" />-->
@@ -37,10 +37,10 @@
           <button class="btn btn-primary btn-mobile-menu" @click="mobileMenu = !mobileMenu">Меню</button>
         </nav>
 
-        <Auth
+        <AuthModal
             v-if="showAuth"
             @close="showAuth = false"
-        ></Auth>
+        ></AuthModal>
       </div>
     </header>
 
@@ -50,13 +50,13 @@
 <script>
   import { mapGetters, mapActions } from 'vuex'
   import svgIcon from 'components/base/SVG.vue'
-  import Auth from 'components/Auth.vue'
+  import AuthModal from 'components/AuthModal.vue'
 
   export default {
   name: 'site-header',
   components: {
     svgIcon,
-    Auth
+    AuthModal
   },
   data() {
     return {

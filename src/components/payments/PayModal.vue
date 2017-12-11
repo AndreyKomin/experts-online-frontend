@@ -1,6 +1,6 @@
 <template>
   <modal v-if="showModal" classnames="modal-pay">
-    <h3 slot="header">Оплатить консультацию</h3>
+    <h3 slot="header">Тест оплаты</h3>
     <div slot="body">
       <p>
         <strong>Оплатить консультацию с помощью Яндекса</strong>

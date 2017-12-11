@@ -1,5 +1,5 @@
-export const apiUrl = (process.env.NODE_ENV !== 'production') ? `http://0.0.0.0:7000` : `http://api.xn----8sbnsbindehmjq0kxa.xn--p1ai`;
-export const PORTFOLIO_MAX = 600;
+export const apiUrl = (process.env.NODE_ENV !== 'production') ? `http://0.0.0.0:7000/api` : `http://api.xn----8sbnsbindehmjq0kxa.xn--p1ai`;
+export const PORTFOLIO_MAX = 10000;
 export const RECOMMEND_TIME_MINUTES = 15;
 
 export const MESSENGERS = [
