@@ -74,7 +74,7 @@ Vue.use(VueAuthenticate, {
       display: 'popup',
       oauthType: '2.0',
       popupOptions: { width: 452, height: 633 },
-      clientId: "620b4868620b4868620b4868b9624cd8666620b620b4868382f566a534439527a7449ca"
+      clientId: "4689934"
     },
   }
 });
