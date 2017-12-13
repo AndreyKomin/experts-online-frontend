@@ -17,16 +17,19 @@
 
           <div class="messengers">
             <h3>Способы связи:</h3>
-            <div class="form-group" v-for="messenger in allMessengers">
-              <label :for="'messenger-' + messenger.id">{{ messenger.name }}</label>
-              <template v-if="me.messengers && me.messengers[messenger.code]" >
-                <input :id="'messenger-' + messenger.id" type="text" class="form-control" v-model="me.messengers[messenger.code].profile_link" />
-              </template>
-              <template v-else>
-                <button @click="addMessenger(messenger.code)">Add</button>
-              </template>
+            <div class="form-group" v-for="messenger in me.messengers">
+              <label :for="'messenger-' + messenger.messenger_id">{{ messenger.messenger.name }}</label>
+              <input :id="'messenger-' + messenger.messenger_id" type="text" class="form-control" v-model="messenger.profile_link" />
               <input type="hidden" :value="messenger.messenger_unique_id" />
               <input type="hidden" :value="messenger.code">
+            </div>
+            <div class="form-group" v-for="messenger in allMessengers">
+              <template v-if="checkIfMessengerAlreadyAdded(messenger.code)" >
+                <label :for="'messenger-' + messenger.id">{{ messenger.name }}</label>
+                <button @click="addMessenger(messenger.code)">Add</button>
+                <input type="hidden" :value="messenger.messenger_unique_id" />
+                <input type="hidden" :value="messenger.code">
+              </template>
             </div>
           </div>
 
@@ -228,6 +231,9 @@
     recountWantEarn() {
       this.wantEarn = this.me.wantEarn;
       return true;
+    },
+    checkIfMessengerAlreadyAdded(code) {
+      return this.me.messengers && !this.me.messengers[code]
     },
     addMessenger(code) {
       this.me.messengers[code] = {
