@@ -3,12 +3,11 @@
   <div class="banner">
     <h1 class="heading">Получи консультацию от эксперта по своему проекту</h1>
 
-    <h3 class="desc">Популярные запросы:</h3>
-    <div class="buttons">
-      <router-link class="button" v-for="button in buttons" :key="button.id" :to="{ path: 'search', query: { tags: button.tag }}">{{button.name}}</router-link>
-    </div>
-    <div>
-      <SearchForm />
+    <h3 class="desc">Разделы:</h3>
+    <div class="links">
+      <router-link class="btn btn-primary btn-lg" to="/experts"><span>Эксперты</span></router-link>
+      <router-link class="btn btn-primary btn-lg" to="/users"><span>Пользователи</span></router-link>
+      <router-link class="btn btn-primary btn-lg" to="/contacts"><span>Информация</span></router-link>
     </div>
   </div>
 
@@ -27,32 +26,6 @@
 
   export default {
   name: 'home', // required
-  data() {
-    return {
-      buttons: [
-        {
-          id: 3,
-          name: '#Топ-менеджмент',
-          tag: "top-management"
-        },
-        {
-          id: 2,
-          name: '#Bitcoin',
-          tag: "bitcoin"
-        },
-        {
-          id: 4,
-          name: '#Yandex.Direct',
-          tag: "direct"
-        },
-        {
-          id: 4,
-          name: '#Директ',
-          tag: "direct"
-        },
-      ]
-    }
-  },
   components: {
     SearchForm
   },
@@ -82,11 +55,21 @@
     align-items center
   .button
     width auto
-  .buttons
+
+  .links
     width 100%
     display flex
+    flex-wrap wrap
     justify-content center
 
+    .btn
+      width 180px
+      height 180px
+      margin 10px
+      max-width none
+      align-items center
+      display flex
+      justify-content center
 
   .desc
     margin-bottom 10px
