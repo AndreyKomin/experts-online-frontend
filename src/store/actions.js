@@ -47,6 +47,10 @@ export default {
     return updateMe(state.token, data).then(() => commit('SET_ME', { me: data }))
   },
 
+  ADD_MESSENGER: ({ commit }, { code, data }) => {
+    return commit('SET_MESSENGER', { code, data })
+  },
+
   UPDATE_AVATAR: ({ commit }, { avatar }) => {
     return commit('SET_AVATAR', { avatar })
   },

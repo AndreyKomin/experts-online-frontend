@@ -26,13 +26,14 @@
       </div>
       <div class="info">
         <div @click="showUser(item.id)" class="portfolio" :class="{ 'active' : mouseOver }">{{ item.portfolio }}</div>
-        <div class="buttons text-right">
+        <div class="contact-buttons text-right">
           <span class="buttons-title">Способы связи:</span>
-          <div v-for="messenger in item.messengers" class="flex">
-            <button class="button-icon" :class="messengerName = getMessengerNameById(messenger.messenger_id)">
-              <svg-icon :iconId="'btn-' + messengerName"></svg-icon>
-            </button>
-          </div>
+          <button class="button-icon"
+                  :class="messengerName = getMessengerNameById(messenger.messenger_id)"
+                  v-for="messenger in item.messengers"
+                  @click="openPrompt(messenger.profile_link)">
+          <svg-icon :iconId="'btn-' + messengerName"></svg-icon>
+          </button>
         </div>
       </div>
     </div>
@@ -67,6 +68,9 @@ export default {
     ...{ getMessengerNameById },
     showUser(userId) {
       this.$emit('openUser', userId)
+    },
+    openPrompt(text) {
+      window.prompt("Контактная информация", text);
     }
   }
 }

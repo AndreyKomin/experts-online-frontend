@@ -15,6 +15,12 @@ export default {
     state.me = me;
   },
 
+  SET_MESSENGER: (state, { code, data }) => {
+    const messengers = state.me.messengers;
+    Vue.set(messengers, code, data);
+    state.me.messengers = messengers;
+  },
+
   SET_AVATAR: (state, { avatar }) => {
     state.me.avatar = avatar;
   },

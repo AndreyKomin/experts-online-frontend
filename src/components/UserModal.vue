@@ -38,13 +38,14 @@
 
       <div v-show="tab === 'contact'">
         <transition :name="transition">
-          <div class="buttons">
+          <div class="contact-buttons">
             <span class="buttons-title">Способы связи:</span>
-            <div v-for="messenger in activeUser.messengers" class="flex">
-              <button class="button-icon" :class="messenger">
-                <svg-icon :iconId="'btn-' + messenger"></svg-icon>
-              </button>
-            </div>
+            <button class="button-icon"
+                    :class="messengerName = getMessengerNameById(messenger.messenger_id)"
+                    v-for="messenger in activeUser.messengers"
+                    @click="openPrompt(messenger.profile_link)">
+              <svg-icon :iconId="'btn-' + messengerName"></svg-icon>
+            </button>
           </div>
         </transition>
       </div>
@@ -117,6 +118,7 @@
 <script>
 
   import { mapActions, mapGetters } from 'vuex';
+  import { getMessengerNameById } from '../util/filters';
   import modal from 'components/Modal.vue';
   import svgIcon from 'components/base/SVG.vue'
   import Avatar from 'components/Avatar.vue'
@@ -147,8 +149,12 @@
       ])
     },
     methods: {
+      ...{ getMessengerNameById },
       recountPrice() {
         this.totalPrice = this.payTime * this.activeUser.price
+      },
+      openPrompt(text) {
+        window.prompt("Контактная информация", text);
       }
     }
   }
@@ -177,11 +183,12 @@
     max-width 600px
     cursor default
 
-  .buttons
-    margin 0 0 10px
+  .contact-buttons
+    margin 0 auto 20px
     display flex
     flex-wrap wrap
     justify-content center
+    max-width 240px
 
     .buttons-title
       width 100%
@@ -190,16 +197,14 @@
     button
       text-decoration underline
     svg
-      margin-top 10px
       width 60px
       height 60px
-      margin-right 7px
 
     .flex
       justify-content flex-start
 
     .button-icon
-      margin-left 0
+      margin 15px 10px 0
 
   .yandex-logo
     width 300px

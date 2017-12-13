@@ -52,7 +52,7 @@ Vue.use(VueAuthenticate, {
       redirectUri: window.location.origin,
       requiredUrlParams: ['scope'],
       optionalUrlParams: ['display'],
-      scope: ['profile', 'email'],
+      scope: ['profile', 'email', 'openid'],
       scopePrefix: 'openid',
       scopeDelimiter: ' ',
       display: 'popup',

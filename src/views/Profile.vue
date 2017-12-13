@@ -17,19 +17,21 @@
 
           <div class="messengers">
             <h3>Способы связи:</h3>
-            <div class="form-group" v-for="messenger in me.messengers">
-              <label :for="'messenger-' + messenger.messenger_id">{{ messenger.messenger.name }}</label>
-              <input :id="'messenger-' + messenger.messenger_id" type="text" class="form-control" v-model="messenger.profile_link" />
+            <div class="form-group row" v-for="messenger in me.messengers">
+              <label :for="'messenger-' + messenger.messenger_id" class="col-sm-4 col-form-label col-form-label-sm">{{ messenger.messenger.name }}</label>
+              <div class="col-sm-8">
+                <input :id="'messenger-' + messenger.messenger_id" type="text" class="form-control form-control-sm" v-model="messenger.profile_link" />
+              </div>
               <input type="hidden" :value="messenger.messenger_unique_id" />
               <input type="hidden" :value="messenger.code">
             </div>
-            <div class="form-group" v-for="messenger in allMessengers">
-              <template v-if="checkIfMessengerAlreadyAdded(messenger.code)" >
-                <label :for="'messenger-' + messenger.id">{{ messenger.name }}</label>
-                <button @click="addMessenger(messenger.code)">Add</button>
-                <input type="hidden" :value="messenger.messenger_unique_id" />
-                <input type="hidden" :value="messenger.code">
-              </template>
+            <div class="form-group row" v-for="messenger in allMessengers" v-if="checkIfMessengerAlreadyAdded(messenger.code)" >
+              <label :for="'messenger-' + messenger.id" class="col-sm-4 col-form-label col-form-label-sm">{{ messenger.name }}</label>
+              <div class="col-sm-8">
+                <button class="btn btn-primary btn-sm" @click="addMessenger(messenger.code)">Добавить</button>
+              </div>
+              <input type="hidden" :value="messenger.messenger_unique_id" />
+              <input type="hidden" :value="messenger.code">
             </div>
           </div>
 
@@ -75,7 +77,7 @@
               <label class="custom-control custom-checkbox">
                 <input type="checkbox" class="custom-control-input" v-model="me.wantEarn" @change="recountWantEarn(!me.wantEarn)">
                 <span class="custom-control-indicator"></span>
-                <span class="custom-control-description">Хочу зарабатывать</span>
+                <span class="custom-control-description">Подключить оплату</span>
               </label>
             </div>
 
@@ -209,7 +211,8 @@
   methods: {
     ...mapActions([
       'UPDATE_ME',
-      'UPDATE_AVATAR'
+      'UPDATE_AVATAR',
+      'ADD_MESSENGER'
     ]),
     updateProfile() {
       this.UPDATE_ME({
@@ -236,12 +239,16 @@
       return this.me.messengers && !this.me.messengers[code]
     },
     addMessenger(code) {
-      this.me.messengers[code] = {
-        user_id: 1,
-        messenger_id: 2,
-        messenger_unique_id: "377796775981159",
-        profile_link: "vkvk",
-      }
+      this.ADD_MESSENGER({
+        code,
+        data: {
+          user_id: 1,
+          messenger_id: this.allMessengers[code].id,
+          messenger_unique_id: "null",
+          profile_link: "",
+          messenger: this.allMessengers[code],
+        },
+      })
     },
   }
 }

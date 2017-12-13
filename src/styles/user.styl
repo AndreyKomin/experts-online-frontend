@@ -78,21 +78,24 @@
   .price-time
     margin-left 5px
 
-.buttons
+.contact-buttons
   margin-top 10px
   margin-left 30px
-  max-width 300px
+  max-width 120px
+  display flex
+  flex-wrap wrap
+  align-items flex-start
+  justify-content flex-end
+
+  .buttons-title
+    width 100%
+
   +responsive(mobile)
     max-width 28px
     margin-left 10px
 
     .buttons-title
       display none
-
-  .flex
-    display flex
-    align-items flex-start
-    justify-content flex-end
 
   svg
     width 32px
