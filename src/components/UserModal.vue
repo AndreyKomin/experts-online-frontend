@@ -41,8 +41,8 @@
           <div class="buttons">
             <span class="buttons-title">Способы связи:</span>
             <div v-for="messenger in activeUser.messengers" class="flex">
-              <button class="button-icon" :class="messengerName = getMessengerNameById(messenger.messenger_id)">
-                <svg-icon :iconId="'btn-' + messengerName"></svg-icon>
+              <button class="button-icon" :class="messenger">
+                <svg-icon :iconId="'btn-' + messenger"></svg-icon>
               </button>
             </div>
           </div>
@@ -120,7 +120,6 @@
   import modal from 'components/Modal.vue';
   import svgIcon from 'components/base/SVG.vue'
   import Avatar from 'components/Avatar.vue'
-  import { getMessengerNameById } from '../util/filters'
 
   export default {
     name: "user-modal",
@@ -148,7 +147,6 @@
       ])
     },
     methods: {
-      ...{ getMessengerNameById },
       recountPrice() {
         this.totalPrice = this.payTime * this.activeUser.price
       }

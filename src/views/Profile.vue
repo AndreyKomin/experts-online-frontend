@@ -17,10 +17,14 @@
 
           <div class="messengers">
             <h3>Способы связи:</h3>
-
-            <div class="form-group" v-for="(messenger, index) in me.messengers">
-              <label :for="'messenger-' + messenger.messenger_id">{{ messenger.messenger_id }}</label>
-              <input :id="'messenger-' + messenger.messenger_id" type="text" class="form-control" v-model="messenger.profile_link" />
+            <div class="form-group" v-for="messenger in allMessengers">
+              <label :for="'messenger-' + messenger.id">{{ messenger.name }}</label>
+              <template v-if="me.messengers && me.messengers[messenger.code]" >
+                <input :id="'messenger-' + messenger.id" type="text" class="form-control" v-model="me.messengers[messenger.code].profile_link" />
+              </template>
+              <template v-else>
+                <button @click="addMessenger(messenger.code)">Add</button>
+              </template>
               <input type="hidden" :value="messenger.messenger_unique_id" />
               <input type="hidden" :value="messenger.code">
             </div>
@@ -140,7 +144,7 @@
 <script>
 
   import { mapActions, mapGetters } from 'vuex';
-  import { PORTFOLIO_MAX, RECOMMEND_TIME_MINUTES } from './../config'
+  import { PORTFOLIO_MAX, RECOMMEND_TIME_MINUTES, MESSENGERS } from './../config'
   import svgIcon from 'components/base/SVG.vue'
   import avatarModal from 'components/AvatarModal.vue'
   import payModal from 'components/payments/PayModal.vue'
@@ -166,6 +170,7 @@
       avatarModal: false,
       payModal: false,
       wantEarn: false,
+      allMessengers: MESSENGERS,
       portfolioMax: PORTFOLIO_MAX,
       recommendTime: RECOMMEND_TIME_MINUTES,
       portfolio: 0,
@@ -223,7 +228,15 @@
     recountWantEarn() {
       this.wantEarn = this.me.wantEarn;
       return true;
-    }
+    },
+    addMessenger(code) {
+      this.me.messengers[code] = {
+        user_id: 1,
+        messenger_id: 2,
+        messenger_unique_id: "377796775981159",
+        profile_link: "vkvk",
+      }
+    },
   }
 }
 </script>

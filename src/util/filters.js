@@ -32,5 +32,5 @@ export function getUserId (userID) {
 }
 
 export function getMessengerNameById (id) {
-  return MESSENGERS.filter(i => i.id === id)[0].code
+  return Object.values(MESSENGERS).filter(i => i.id === id)[0].code
 }
