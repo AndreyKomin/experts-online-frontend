@@ -14,14 +14,14 @@
           <div class="nav-container" :class="{ 'open': mobileMenu }">
             <router-link class="menu-item" to="/experts"><span>Эксперты</span></router-link>
             <router-link class="menu-item" to="/users"><span>Пользователи</span></router-link>
-            <a href="#" v-if="!me.login" @click="showAuth = true" class="menu-item"><span>Вступить в сообщество</span></a>
+            <a href="#" v-if="!myInfo.login" @click="showAuth = true" class="menu-item"><span>Вступить в сообщество</span></a>
             <router-link class="menu-item" to="/contacts"><span>Информация</span></router-link>
             <div class="flex1"></div>
             <!--<ExpertsFilter v-if="$route.path === '/search'" />-->
 
-            <div class="btn-group" v-if="me.login">
+            <div class="btn-group" v-if="myInfo.login">
               <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Привет, {{ me.first_name }}
+                Привет, {{ myInfo.first_name }}
               </button>
               <div class="dropdown-menu dropdown-menu-right">
                 <router-link class="dropdown-item" to="/profile">Профиль</router-link>
@@ -30,7 +30,7 @@
               </div>
             </div>
 
-            <button v-if="!me.login" @click="showAuth = true" class="btn btn-primary">
+            <button v-if="!myInfo.login" @click="showAuth = true" class="btn btn-primary">
               Вход
             </button>
           </div>
@@ -65,7 +65,7 @@
     };
   },
   computed: mapGetters([
-    'me'
+    'myInfo'
   ]),
   mounted() {
     this.FETCH_ME()

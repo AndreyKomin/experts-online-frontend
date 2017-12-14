@@ -1,10 +1,16 @@
 <template>
   <div class="profile container">
-    <template v-if="me">
+    <template v-if="myInfo">
+
+      <transition name="alert">
+        <div v-if="showSuccess" class="alert alert-success" role="alert">
+          Сохранено!
+        </div>
+      </transition>
       <div class="row">
         <div class="col-lg-4 text-center">
           <a href="" v-on:click.prevent="avatarModal = true">
-            <Avatar class="avatar-image" :src="me.avatar" :alt="`${me.first_name} ${me.last_name}`" />
+            <Avatar class="avatar-image" :src="myAvatar" :alt="`${myInfo.first_name} ${myInfo.last_name}`" />
           </a>
           <div class="buttons">
             <button class="btn btn-primary" @click="avatarModal = true">Обновить фото</button>
@@ -17,10 +23,15 @@
 
           <div class="messengers">
             <h3>Способы связи:</h3>
-            <div class="form-group row" v-for="messenger in me.messengers">
-              <label :for="'messenger-' + messenger.messenger_id" class="col-sm-4 col-form-label col-form-label-sm">{{ messenger.messenger.name }}</label>
-              <div class="col-sm-8">
+            <div class="form-group row" v-for="messenger in myMessengers">
+              <label :for="'messenger-' + messenger.messenger_id" class="col-sm-3 col-form-label col-form-label-sm">{{ messenger.messenger.name }}</label>
+              <div class="input-group col-sm-9">
                 <input :id="'messenger-' + messenger.messenger_id" type="text" class="form-control form-control-sm" v-model="messenger.profile_link" />
+                <span class="input-group-btn">
+                  <button class="btn btn-clear btn-sm " type="button" @click="removeMessenger(messenger.messenger.code)">
+                    <svg-icon iconId="close"></svg-icon>
+                  </button>
+                </span>
               </div>
               <input type="hidden" :value="messenger.messenger_unique_id" />
               <input type="hidden" :value="messenger.code">
@@ -37,7 +48,7 @@
 
         </div>
         <div class="col-lg-8">
-          <h2 class="name-heading">{{ me.first_name }} {{ me.last_name }} <svg-icon iconId="shield" v-if="me.isExpert" aria-label="Является Экспертом" /></h2>
+          <h2 class="name-heading">{{ myInfo.first_name }} {{ myInfo.last_name }} <svg-icon iconId="shield" v-if="myInfo.isExpert" aria-label="Является Экспертом" /></h2>
           <div class="labels mt20">
           </div>
 
@@ -46,36 +57,38 @@
               <div class="col">
                 <div class="form-group">
                   <label for="first_name">Имя</label>
-                  <input id="first_name" type="text" class="form-control" v-model="me.first_name" />
+                  <input id="first_name" type="text" class="form-control" v-model="myInfo.first_name" />
                 </div>
               </div>
               <div class="col">
                 <div class="form-group">
                   <label for="last_name">Фамилия</label>
-                  <input id="last_name" type="text" class="form-control" v-model="me.last_name" />
+                  <input id="last_name" type="text" class="form-control" v-model="myInfo.last_name" />
                 </div>
               </div>
             </div>
 
             <div class="form-group">
-              <label for="login">Логин в системе ( <small><a :href="'https://эксперты-онлайн.рф/' + me.login" target="_blank">{{ 'http://эксперты-онлайн.рф/' + me.login }}</a></small> )</label>
-              <input id="login" type="text" class="form-control" v-model="me.login" maxlength="32" />
+              <label for="login">Логин в системе
+                <!--( <small><a :href="'https://эксперты-онлайн.рф/' + myInfo.login" target="_blank">{{ 'http://эксперты-онлайн.рф/' + myInfo.login }}</a></small> )-->
+              </label>
+              <input id="login" type="text" class="form-control" v-model="myInfo.login" maxlength="32" />
             </div>
 
             <label class="custom-control custom-checkbox">
-              <input type="checkbox" class="custom-control-input" v-model="me.directInvite">
+              <input type="checkbox" class="custom-control-input" v-model="myInfo.directInvite">
               <span class="custom-control-indicator"></span>
               <span class="custom-control-description">Разрешить прямое добавление <br><small>(Пользователю будут показаны ваши контактные данные по запросу)</small></span>
             </label>
 
             <div class="form-group" v-if="recountPortfolio()">
               <label for="portfolio">Портфолио (<small>Макс. {{ portfolioMax }} символов {{ portfolio ? ', осталось ' + (portfolioMax - portfolio) : '' }}</small>)</label>
-              <textarea id="portfolio" type="text" class="form-control" rows="6" v-model="me.portfolio" @input="recountPortfolio" placeholder="Опишите ваш опыт и деятельность. По данному тексту будет осуществляться поиск." :maxlength="portfolioMax"></textarea>
+              <textarea id="portfolio" type="text" class="form-control" rows="6" v-model="myInfo.portfolio" @input="recountPortfolio" placeholder="Опишите ваш опыт и деятельность. По данному тексту будет осуществляться поиск." :maxlength="portfolioMax"></textarea>
             </div>
 
             <div class="form-group" v-if="recountWantEarn()">
               <label class="custom-control custom-checkbox">
-                <input type="checkbox" class="custom-control-input" v-model="me.wantEarn" @change="recountWantEarn(!me.wantEarn)">
+                <input type="checkbox" class="custom-control-input" v-model="myInfo.wantEarn" @change="recountWantEarn(!myInfo.wantEarn)">
                 <span class="custom-control-indicator"></span>
                 <span class="custom-control-description">Подключить оплату</span>
               </label>
@@ -92,7 +105,7 @@
                     <div class="price-flex">
                       <svg-icon iconId="ruble"></svg-icon>
                       <div class="price-time">/ минута</div>
-                      <input id="price" type="text" class="form-control input-price" v-model="me.price" @input="recountPrice"/>
+                      <input id="price" type="text" class="form-control input-price" v-model="myInfo.price" @input="recountPrice" maxlength="3"/>
                     </div>
                   </div>
                 </div>
@@ -117,7 +130,7 @@
                 <div class="flex1">
                   <div class="form-group">
                     <label for="paymentInfo">Яндекс кошелёк</label>
-                    <input id="paymentInfo" type="text" class="form-control" v-model="me.paymentInfo" maxlength="64" placeholder="41001xxxxxxxxxxxx" />
+                    <input id="paymentInfo" type="text" class="form-control" v-model="myInfo.paymentInfo" maxlength="64" placeholder="41001xxxxxxxxxxxx" />
                   </div>
                 </div>
                 <div>
@@ -141,7 +154,7 @@
       <avatar-modal :showModal="avatarModal" @close="avatarModal = false"></avatar-modal>
       <pay-modal @close="payModal = false"
                  :showModal="payModal"
-                 :paymentInfo="me.paymentInfo"></pay-modal>
+                 :paymentInfo="myInfo.paymentInfo"></pay-modal>
     </template>
   </div>
 </template>
@@ -167,11 +180,14 @@
 
   computed: {
     ...mapGetters([
-      'me'
+      'myInfo',
+      'myMessengers',
+      'myAvatar'
     ])
   },
   data() {
     return {
+      showSuccess: false,
       avatarModal: false,
       payModal: false,
       wantEarn: false,
@@ -212,31 +228,41 @@
     ...mapActions([
       'UPDATE_ME',
       'UPDATE_AVATAR',
-      'ADD_MESSENGER'
+      'ADD_MESSENGER',
+      'REMOVE_MESSENGER',
     ]),
     updateProfile() {
       this.UPDATE_ME({
-        ...this.me
+        data: {
+          avatar: this.myAvatar,
+          info: this.myInfo,
+          messengers: this.myMessengers,
+        }
+      }).then(() => {
+        this.showSuccess = true;
+        setTimeout(()=> {
+          this.showSuccess = false;
+        }, 1000);
       })
     },
     removeAvatar() {
-      const avatar = null;
+      const avatar = "";
       this.UPDATE_AVATAR({ avatar });
     },
     recountPortfolio() {
-      this.portfolio = (this.me.portfolio) ? this.me.portfolio.length : 0;
+      this.portfolio = (this.myInfo.portfolio) ? this.myInfo.portfolio.length : 0;
       return true;
     },
     recountPrice() {
-      this.price = this.me.price;
+      this.price = this.myInfo.price;
       return true;
     },
     recountWantEarn() {
-      this.wantEarn = this.me.wantEarn;
+      this.wantEarn = this.myInfo.wantEarn;
       return true;
     },
     checkIfMessengerAlreadyAdded(code) {
-      return this.me.messengers && !this.me.messengers[code]
+      return this.myMessengers && !this.myMessengers[code]
     },
     addMessenger(code) {
       this.ADD_MESSENGER({
@@ -250,12 +276,36 @@
         },
       })
     },
+    removeMessenger(code) {
+      this.REMOVE_MESSENGER({ code })
+    },
   }
 }
 </script>
 
 <style lang="stylus" scoped>
   @import "../styles/variables.styl"
+
+  .alert
+    position: absolute;
+    z-index: 3;
+    box-sizing: border-box;
+    width: calc(100% - 40px);
+    left: 0;
+    top: 0;
+    margin: 20px;
+
+  .alert-enter-active, .alert-leave-active {
+    transition: all 1s;
+  }
+  .alert-enter {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  .alert-leave-to {
+    opacity: 0;
+  }
 
   .profile-progress
     margin-top 20px
@@ -338,4 +388,13 @@
       margin-right 20px
     button
       width 100%
+
+  .btn-clear
+    display flex
+    align-items center
+    background-color transparent
+  .icon-close
+    width 10px
+    height 10px
+    fill: gray
 </style>

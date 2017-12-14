@@ -12,12 +12,23 @@ export default {
   },
 
   SET_ME: (state, { me }) => {
-    state.me = me;
+    state.me.avatar = me.avatar;
+    state.me.messengers = me.messengers;
+    const info = { ...me };
+    delete info.avatar;
+    delete info.messengers;
+    state.me.info = info;
   },
 
   SET_MESSENGER: (state, { code, data }) => {
     const messengers = state.me.messengers;
     Vue.set(messengers, code, data);
+    state.me.messengers = messengers;
+  },
+
+  UNSET_MESSENGER: (state, { code }) => {
+    const messengers = state.me.messengers;
+    Vue.delete(messengers, code)
     state.me.messengers = messengers;
   },
 

@@ -43,12 +43,21 @@ export default {
     return fetchUser(id).then(user => commit('SET_USER', { id, user }))
   },
 
-  UPDATE_ME: ({ state, commit }, { ...data }) => {
-    return updateMe(state.token, data).then(() => commit('SET_ME', { me: data }))
+  UPDATE_ME: ({ state, commit }, { data }) => {
+    const newData = {
+      ...data.info,
+      messengers: data.messengers,
+      avatar: data.avatar,
+    };
+    return updateMe(state.token, newData).then(() => commit('SET_ME', { me: newData }))
   },
 
   ADD_MESSENGER: ({ commit }, { code, data }) => {
     return commit('SET_MESSENGER', { code, data })
+  },
+
+  REMOVE_MESSENGER: ({ commit }, { code }) => {
+    return commit('UNSET_MESSENGER', { code })
   },
 
   UPDATE_AVATAR: ({ commit }, { avatar }) => {

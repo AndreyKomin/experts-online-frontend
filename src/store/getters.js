@@ -22,8 +22,18 @@ export default {
     return user
   },
 
-  me (state, getters) {
+  myInfo (state, getters) {
     const { me } = state;
-    return { ...me }
+    return { ...me.info }
+  },
+
+  myAvatar (state, getters) {
+    const { me } = state;
+    return me.avatar
+  },
+
+  myMessengers (state, getters) {
+    const { me } = state;
+    return { ...me.messengers }
   }
 }

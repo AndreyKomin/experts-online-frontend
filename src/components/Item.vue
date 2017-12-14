@@ -24,7 +24,7 @@
           </div>
         </div>
       </div>
-      <div class="info">
+      <div class="profile-info">
         <div @click="showUser(item.id)" class="portfolio" :class="{ 'active' : mouseOver }">{{ item.portfolio }}</div>
         <div class="contact-buttons text-right">
           <span class="buttons-title">Способы связи:</span>

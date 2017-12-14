@@ -12,7 +12,11 @@ export function createStore () {
       itemsPerPage: 10,
       users: [],
       user: {},
-      me: {},
+      me: {
+        avatar: "",
+        info: "",
+        messengers: "",
+      },
       token: "",
       searchQuery: "",
       userToShow: {},

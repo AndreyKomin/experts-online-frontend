@@ -28,7 +28,7 @@
               </div>
             </div>
             <div class="item-body col-9">
-              <div class="info">
+              <div class="profile-info">
                 <div class="portfolio">{{ activeUser.portfolio }}</div>
               </div>
             </div>
@@ -182,6 +182,8 @@
     line-height normal
     max-width 600px
     cursor default
+    overflow auto
+    max-height 400px
 
   .contact-buttons
     margin 0 auto 20px
