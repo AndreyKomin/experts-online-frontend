@@ -19,7 +19,7 @@ export default {
 
   activeUser (state, getters) {
     const { user } = state;
-    return user
+    return { ...user }
   },
 
   myInfo (state, getters) {

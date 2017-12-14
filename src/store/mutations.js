@@ -44,7 +44,7 @@ export default {
     state.users = users;
   },
 
-  SET_USER: (state, { id, user }) => {
-    state.user = user || false; /* false means user not found */
+  SET_USER: (state, { user }) => {
+    state.user = user;
   }
 }

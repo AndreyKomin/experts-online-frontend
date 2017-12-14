@@ -40,7 +40,11 @@ export default {
   },
 
   FETCH_USER: ({ commit }, { id }) => {
-    return fetchUser(id).then(user => commit('SET_USER', { id, user }))
+    return fetchUser(id).then(user => commit('SET_USER', { user }))
+  },
+
+  EMPTY_USER: ({ commit }) => {
+    return commit('SET_USER', { user: null })
   },
 
   UPDATE_ME: ({ state, commit }, { data }) => {

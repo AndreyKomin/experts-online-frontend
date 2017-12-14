@@ -216,12 +216,15 @@
         this.progress.portfolio = 30
       }
     },
-    me(val) {
-      if (val.avatar && val.avatar.length > 0) {
-        this.progress.avatar = 30
+    myAvatar(val) {
+      if (val && val.length > 0) {
+        this.progress.avatar = 40
       } else {
         this.progress.avatar = 0
       }
+    },
+    myMessengers(val){
+      this.progress.contacts = 5 * Object.keys(val).length
     },
   },
   methods: {

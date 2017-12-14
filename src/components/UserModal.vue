@@ -110,7 +110,7 @@
       <button class="btn btn-sm btn-success" v-show="tab !== 'profile'" @click="tab = 'profile'">Профиль</button>
       <button class="btn btn-sm btn-primary" v-show="tab !== 'contact'" @click="tab = 'contact'">Связаться</button>
       <button class="btn btn-sm btn-warning" v-show="tab !== 'pay'" @click="tab = 'pay'">Оплатить</button>
-      <button class="btn btn-sm btn-light" @click="$emit('close')">Закрыть</button>
+      <button class="btn btn-sm btn-light" @click="closeUser()">Закрыть</button>
     </div>
   </modal>
 </template>
@@ -149,12 +149,25 @@
       ])
     },
     methods: {
+      ...mapActions([
+        'EMPTY_USER'
+      ]),
       ...{ getMessengerNameById },
       recountPrice() {
         this.totalPrice = this.payTime * this.activeUser.price
       },
       openPrompt(text) {
         window.prompt("Контактная информация", text);
+      },
+      resetData() {
+        this.payTime = null;
+        this.totalPrice = 0;
+        this.tab = "profile";
+      },
+      closeUser() {
+        this.resetData();
+        this.EMPTY_USER({});
+        this.$emit('close')
       }
     }
   }
@@ -183,7 +196,7 @@
     max-width 600px
     cursor default
     overflow auto
-    max-height 400px
+    max-height 400px;
 
   .contact-buttons
     margin 0 auto 20px
