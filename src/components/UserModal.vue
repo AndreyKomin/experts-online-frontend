@@ -86,7 +86,7 @@
                 <div class="form-group">
                   <label for="payTime">Какое количество минут хотите оплатить {{ activeUser.first_name }} {{ activeUser.last_name }}?</label>
                   <div class="price-flex">
-                    <input id="payTime" type="text" class="form-control input-price" v-model="payTime" @input="recountPrice" maxlength="3"/>
+                    <input id="payTime" type="number" class="form-control input-price" v-model.number="payTime" @input="recountPrice" min="1" max="999" />
                     <div class="flex1"></div>
                     <div class="price-time amount">Сумма: {{ totalPrice }}</div>
                     <svg-icon iconId="ruble"></svg-icon>
@@ -225,6 +225,6 @@
     width 300px
 
   .input-price
-    max-width 60px
+    max-width 80px
 
 </style>

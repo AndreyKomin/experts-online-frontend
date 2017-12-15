@@ -95,6 +95,9 @@
     text-decoration none
     margin-right 60px
 
+    +responsive(mobile)
+      margin-right 10px
+
     .text
       display flex
       flex-direction column

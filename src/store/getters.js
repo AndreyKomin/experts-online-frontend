@@ -35,5 +35,31 @@ export default {
   myMessengers (state, getters) {
     const { me } = state;
     return { ...me.messengers }
+  },
+
+  myProgress (state, getters) {
+    const { me } = state;
+
+    const progress = {
+      portfolio: 0,
+      avatar: 0,
+      contacts: 0,
+    };
+
+    if (me.info && me.info.portfolio && me.info.portfolio.length >= 50) {
+      progress.portfolio = 30;
+    }
+
+    if (me.avatar && me.avatar.length > 0) {
+      progress.avatar = 40;
+    } else {
+      progress.avatar = 0;
+    }
+
+    if(me.messengers){
+      progress.contacts = 5 * Object.keys(me.messengers).length
+    }
+
+    return progress.portfolio + progress.avatar + progress.contacts;
   }
 }

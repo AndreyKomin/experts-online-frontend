@@ -18,7 +18,7 @@
           </div>
 
           <div class="profile-progress progress">
-            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" :aria-valuenow="progress.portfolio + progress.avatar + progress.contacts" aria-valuemin="0" aria-valuemax="100" :style="`width: ${progress.portfolio + progress.avatar + progress.contacts}%`"></div>
+            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" :aria-valuenow="progressLength" aria-valuemin="0" aria-valuemax="100" :style="`width: ${progressLength}%`"></div>
           </div>
 
           <div class="messengers">
@@ -28,7 +28,7 @@
               <div class="input-group col-sm-9">
                 <input :id="'messenger-' + messenger.messenger_id" type="text" class="form-control form-control-sm" v-model="messenger.profile_link" />
                 <span class="input-group-btn">
-                  <button class="btn btn-clear btn-sm " type="button" @click="removeMessenger(messenger.messenger.code)">
+                  <button class="btn btn-clear btn-sm" type="button" v-if="messenger.messenger_unique_id === 'null'" @click="removeMessenger(messenger.messenger.code)">
                     <svg-icon iconId="close"></svg-icon>
                   </button>
                 </span>
@@ -105,7 +105,7 @@
                     <div class="price-flex">
                       <svg-icon iconId="ruble"></svg-icon>
                       <div class="price-time">/ минута</div>
-                      <input id="price" type="text" class="form-control input-price" v-model="myInfo.price" @input="recountPrice" maxlength="3"/>
+                      <input id="price" type="number" class="form-control input-price" v-model.number="myInfo.price" @input="recountPrice"  min="1" max="999" />
                     </div>
                   </div>
                 </div>
@@ -182,8 +182,12 @@
     ...mapGetters([
       'myInfo',
       'myMessengers',
-      'myAvatar'
-    ])
+      'myAvatar',
+      'myProgress'
+    ]),
+    progressLength () {
+      return this.myProgress
+    }
   },
   data() {
     return {
@@ -196,36 +200,7 @@
       recommendTime: RECOMMEND_TIME_MINUTES,
       portfolio: 0,
       price: 0,
-      progress: {
-        portfolio: 0,
-        avatar: 0,
-        contacts: 0
-      },
-      contacts: {
-        telegram: false,
-        skype: false,
-        facebook: false,
-        whatsapp: false,
-        google: false,
-      }
     }
-  },
-  watch: {
-    portfolio(val) {
-      if (val >= 50) {
-        this.progress.portfolio = 30
-      }
-    },
-    myAvatar(val) {
-      if (val && val.length > 0) {
-        this.progress.avatar = 40
-      } else {
-        this.progress.avatar = 0
-      }
-    },
-    myMessengers(val){
-      this.progress.contacts = 5 * Object.keys(val).length
-    },
   },
   methods: {
     ...mapActions([
