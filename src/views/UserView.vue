@@ -30,7 +30,7 @@
         </div>
       </div>
 
-      <modal v-if="showModal" @close="showModal = false" classnames="modal-request">
+      <modal v-if="showModal" @close="showModal = false">
         <h3 slot="header">Отправить запрос</h3>
         <div slot="body">
           <p>Вы собираетесь отправить запрос на консультацию пользаователю <b>{{ user.name }}</b>. Пожалуйста кратко опишите ваш вопрос.</p>

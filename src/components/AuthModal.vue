@@ -1,5 +1,5 @@
 <template>
-  <modal classnames="modal-auth" @close="$emit('close')">
+  <modal @close="$emit('close')">
     <h3 slot="header">Вход / Регистрация</h3>
     <div slot="body">
       <div class="oauth">
